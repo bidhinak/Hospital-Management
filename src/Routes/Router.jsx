@@ -17,11 +17,17 @@ import DDashboard from "../pages/Doctorpage/DDashboard";
 import ViewDoctors from "../pages/Adminpage/ViewDoctors";
 import UHeader from "../pages/Userpage/UHeader";
 import AAddToList from "../pages/Adminpage/AAddToLIst";
-import UDoctorprofile from "../pages/Userpage/UDoctorprofile";
 import Dscheduleadd from "../pages/Doctorpage/Dscheduleadd";
 import Uprofile from "../pages/Userpage/Uprofile";
 import Ascheduleview from "../pages/Adminpage/Ascheduleview";
 import Dscheduleview from "../pages/Doctorpage/Dscheduleview";
+import AViewAddedList from "../pages/Adminpage/AViewAddedList";
+import UCheckSchedule from "../pages/Userpage/UCheckSchedule";
+import UDocprofile from "../pages/Userpage/UDocProfile";
+import DBookView from "../pages/Doctorpage/DBookView";
+import UBookedSchedule from "../pages/Userpage/UBookedSchedule";
+import About from "../pages/Userpage/About";
+import DUpdatePassword from "../pages/Doctorpage/DUpdatePassword";
 
 
 function Router() {
@@ -41,15 +47,21 @@ function Router() {
         {/* user */}
         <Route path="uheader" element={<UHeader/>}/>
         <Route path="udashboard" element={<UDashboard/>}/>
-        <Route path="udoctorprofile/:id" element={<UDoctorprofile/>}/>
+        <Route path="udocprofile/:id" element={<UDocprofile/>}/>
+        <Route path="ucheckschedule/:id" element={<UCheckSchedule/>}/>
         <Route path="uprofile" element={<Uprofile/>}/>
+        <Route path="ubookedschedule" element={<UBookedSchedule/>}/>
+        <Route path="about" element={<About/>}/>
+
 
         {/* doctor */}
         <Route path="ddashboard" element={<DDashboard/>}/>
         <Route path="dscheduleadd" element={<Dscheduleadd/>}/>
         <Route path="dscheduleview" element={<Dscheduleview/>}/>
+        <Route path="dbookview/:id" element={<DBookView/>}/>
         <Route path="dprofileview" element={<Dprofileview/>}/>
         <Route path="notification" element={<DNotview/>}/>
+        <Route path="docupdatepassword" element={<DUpdatePassword/>}/>
         
         {/* admin */}
         <Route path="adminpage" element={<Adminpage/>}/>
@@ -58,7 +70,8 @@ function Router() {
         <Route path="anotview" element={<Anotview/>}/>
         <Route path="viewdoctors" element={<ViewDoctors/>}/>
         <Route path="aaddtolist/:id" element={<AAddToList/>}/>
-        <Route path="ascheduleview" element={<Ascheduleview/>}/>
+        <Route path="aviewaddedlist" element={<AViewAddedList/>}/>
+        <Route path="ascheduleview/:id" element={<Ascheduleview/>}/>
     </Routes>
   )
 }

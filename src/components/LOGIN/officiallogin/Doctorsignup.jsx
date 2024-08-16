@@ -7,6 +7,7 @@ import { useState } from "react";
 
 function Doctorsignup() {
   const [showPassword, setShowPassword] = useState("");
+  const[loading,setloading]=useState(false);
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -24,7 +25,7 @@ function Doctorsignup() {
         .string()
         .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, "not a valid email address")
         .required(),
-      username: yup.string().min(2).max(30).required(),
+      username: yup.string().min(2).max(30).required("name is required"),
       mobile: yup
         .string()
         .matches(/^([+]\d{2})?\d{10}$/, "not a valid mobile number")
@@ -47,6 +48,7 @@ function Doctorsignup() {
         .oneOf([yup.ref("password1")], "password must be same"),
     }),
     onSubmit: async (values) => {
+      setloading(true);
       try {
         const { data } = await axios.post(
           "http://127.0.0.1:8000/api/doctor_signup",
@@ -57,7 +59,7 @@ function Doctorsignup() {
         );
 
         if (data) {
-          console.log(data);
+          setShowPassword(false);
           formik.resetForm();
           toast.success("successfully signed up");
           navigate("/officiallogin");
@@ -71,15 +73,20 @@ function Doctorsignup() {
   });
   return (
     <div>
-      <div className="flex flex-col gap-2 p-10 text-center">
-        <h1>Signup Here</h1>
-        <hr className="self-center border-1.5 gap-2 border-black w-[40%]" />
-
+      <div className="flex flex-col gap-2 p-3 justify-center min-h-screen bg-gray-500 text-center">
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-2 w-[40%] text-left self-center"
+          className="flex flex-col gap-2 w-[50%] text-left border-gray-200  shadow-2xl border backdrop-blur-lg p-5  rounded-2xl  self-center"
         >
-          <label htmlFor="email">Email</label>
+          <h1 className="text-center text-2xl font-bold  text-white">
+            Signup Here
+          </h1>
+          <hr className="self-center border-1.5 gap-2 border-gray-200 w-[100%]" />
+          <div className="flex flex-row gap-2">
+            <i className="fa-solid fa-envelope self-center  text-white "></i>
+
+            <label className="font-semibold  text-white">Email</label>
+          </div>
           <input
             className="outline-none shadow py-1 px-2 shadow-black rounded"
             type="email"
@@ -88,8 +95,11 @@ function Doctorsignup() {
             onChange={formik.handleChange}
           />
           <p className="text-red-600 ">{formik.errors.email}</p>
+          <div className="flex flex-row gap-2">
+            <i className="fa-regular fa-user self-center  text-white "></i>
 
-          <label htmlFor="name">name</label>
+            <label className="font-semibold  text-white">Name</label>
+          </div>
           <input
             className="outline-none shadow py-1 px-2 shadow-black rounded"
             type="text"
@@ -98,8 +108,11 @@ function Doctorsignup() {
             onChange={formik.handleChange}
           />
           <p className="text-red-600 ">{formik.errors.username}</p>
+          <div className="flex flex-row gap-2">
+            <i className="fa-solid fa-mobile-screen-button self-center  text-white "></i>
 
-          <label htmlFor="mobile">Mobile</label>
+            <label className="font-semibold  text-white">Mobile</label>
+          </div>
           <input
             className="outline-none shadow py-1 px-2 shadow-black rounded"
             type="mobile"
@@ -108,7 +121,11 @@ function Doctorsignup() {
             onChange={formik.handleChange}
           />
           <p className="text-red-600 ">{formik.errors.mobile}</p>
-          <label className="font-bold">Department</label>
+          <div className="flex flex-row gap-2">
+            <i className="fa-solid fa-building-user self-center  text-white "></i>
+
+            <label className="font-semibold  text-white">Department</label>
+          </div>
           <input
             className="outline-none shadow py-1 px-2 shadow-black rounded"
             type="text"
@@ -117,19 +134,24 @@ function Doctorsignup() {
             onChange={formik.handleChange}
           />
           <p className="text-red-700">{formik.errors.department}</p>
-          <label className="font-bold">Photo</label>
+          <div className="flex flex-row gap-2">
+            <i className="fa-regular fa-image self-center  text-white "></i>
+
+            <label className="font-semibold  text-white">Photo</label>
+          </div>
           <input
             className="px-1 outline-none border rounded-md shadow-md py-2 w-[80%] self-center"
             type="file"
             name="photo"
             accept="image/*"
-            onChange={(e) =>
-              formik.setFieldValue("photo",e.target.files[0])
-            }
+            onChange={(e) => formik.setFieldValue("photo", e.target.files[0])}
           />
           <p className="text-red-700">{formik.errors.photo}</p>
-     
-          <label className="font-bold">Qualification</label>
+          <div className="flex flex-row gap-2">
+            <i className="fa-solid fa-graduation-cap self-center  text-white "></i>
+
+            <label className="font-semibold  text-white">Qualification</label>
+          </div>
           <input
             className="outline-none shadow py-1 px-2 shadow-black rounded"
             type="text"
@@ -138,8 +160,11 @@ function Doctorsignup() {
             onChange={formik.handleChange}
           />
           <p className="text-red-700">{formik.errors.qualification}</p>
+          <div className="flex flex-row gap-2">
+            <i className="fa-solid fa-lock self-center  text-white "></i>
 
-          <label htmlFor="password">Password</label>
+            <label className="font-semibold  text-white">Password</label>
+          </div>
           <span className="relative">
             <input
               className="outline-none shadow py-1 px-2 shadow-black rounded w-[100%]"
@@ -156,8 +181,13 @@ function Doctorsignup() {
             />
           </span>
           <p className="text-red-600 ">{formik.errors.password1}</p>
+          <div className="flex flex-row gap-2">
+            <i className="fa-solid fa-lock self-center  text-white "></i>
 
-          <label htmlFor="password">Confirm Password</label>
+            <label className="font-semibold  text-white">
+              Confirm Password
+            </label>
+          </div>
           <input
             className="outline-none shadow py-1 px-2 shadow-black rounded"
             type="password"
@@ -166,13 +196,16 @@ function Doctorsignup() {
             onChange={formik.handleChange}
           />
           <p className="text-red-600 ">{formik.errors.password2}</p>
-          <button
-            className="bg-gray-600 text-white px-5 py-2 rounded"
-            type="submit"
-          >
-            Signup
+          <button className="bg-white px-5 py-2 rounded" type="submit">
+          {loading ? (
+              <div className="flex justify-center items-center ">
+                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-blue-500"></div>
+              </div>
+            ) : (
+              "signup"
+            )}
           </button>
-          <p className="flex flex-row justify-between">
+          <p className="flex flex-row text-white justify-between">
             Already have an account?{" "}
             <span
               className="cursor-pointer"

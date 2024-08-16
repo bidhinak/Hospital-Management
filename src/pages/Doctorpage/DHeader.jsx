@@ -1,33 +1,71 @@
-import { useDispatch } from "react-redux";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { initialState, updateUser } from "../../redux/slices/userSlice";
+import { useState } from "react";
 
-const navItems = [
-    { page: "HOME", link: "/ddashboard" },
-    { page: "ABOUT US", link: "/facilities" },
-    { page: "PROFILE", link: "/dprofileview" },
-    {page: "NOTIFICATION", link: "/notification" },
-    
-  ];
 function DHeader() {
-  const navigate=useNavigate();
-  const dispatch=useDispatch();
+  const { username } = useSelector((state) => state.user);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const firstLetter = username.charAt(0);
+  const [dropdown, setDropdown] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdown(!dropdown);
+  };
+
   return (
     <div>
-      <div className="flex flex-row justify-between p-8 bg-blue-400 text-white">
-      <h1 className="text-black">HOSPITAL MANAGEMENT</h1>
+      <div className="flex flex-row justify-between bg-gradient-to-t from-blue-300 p-8 bg-blue-700 text-white">
+        <h1 className="text-black">HOSPITAL MANAGEMENT</h1>
 
-        <ul className="flex flex-row gap-5 ">
-          {navItems.map((ele) => (
-            <NavLink to={ele.link} key={ele.link}>
-              <li>{ele.page}</li>
-            </NavLink>
-          ))}
-          <li className="cursor-pointer" onClick={()=>dispatch(updateUser(initialState),navigate("/"))}>LOGOUT</li>
+        <ul className="flex flex-row gap-8 ">
+          <li
+            onClick={() => navigate("/ddashboard")}
+            className="hover:text-gray-300 cursor-pointer"
+          >
+            HOME
+          </li>
+
+          <li
+            onClick={() => navigate("/notification")}
+            className="hover:text-gray-300 cursor-pointer"
+          >
+            NOTIFICATION
+          </li>
+          
+          <div className="relative">
+            <button
+              onClick={toggleDropdown}
+              className="bg-red-500 rounded-full cursor-pointer px-3 py-1 hover:text-gray-900"
+            >
+              {firstLetter}
+            </button>
+
+            {dropdown && (
+              <ul className="absolute z-20 right-0 mt-2 w-48 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg">
+                <li onClick={() => navigate("/dprofileview")}>
+                  <a className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    PROFILE
+                  </a>
+                </li>
+                <li
+                  onClick={() => {
+                    dispatch(updateUser(initialState));
+                    navigate("/");
+                  }}
+                >
+                  <a className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    LOGOUT
+                  </a>
+                </li>
+              </ul>
+            )}
+          </div>
         </ul>
       </div>
     </div>
-  )
+  );
 }
 
-export default DHeader
+export default DHeader;

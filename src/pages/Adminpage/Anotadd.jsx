@@ -5,8 +5,6 @@ import * as yup from "yup";
 import Adminpage from "./Adminpage";
 
 function Anotadd() {
-  
-
   const formik = useFormik({
     initialValues: { description: "" },
     validationSchema: yup.object({
@@ -32,27 +30,30 @@ function Anotadd() {
 
   return (
     <div>
-        <Adminpage/>
-      <div className="text-center">
-        <h1 className="text-pretty text-2xl text-green-400">Notification </h1>
-        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-2">
-          <label>description</label>
+      <Adminpage />
+      <div className="text-center flex flex-col gap-6">
+        <h1 className="text-pretty text-3xl underline text-green-500">Add your Notification </h1>
+        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-5">
+          <label className="text-xl font-serif">Description</label>
           <input
             onChange={formik.handleChange}
             value={formik.values.description}
-            className="px-1 outline-none border rounded-md shadow-lg py-3 w-[50%] self-center"
+            className="px-1 outline-none border rounded-md shadow-lg py-2 w-[50%] self-center"
             name="description"
+            placeholder="type something..."
             type="text"
           />
           <p className="text-red-700 text-center">
             {formik.errors.description}
           </p>
-          <button className="bg-blue-500 py-3 rounded-md w-[20%] self-center" type="submit">send</button>
+          <button
+            className="bg-green-400 text-white py-3 rounded-md w-[20%] self-center"
+            type="submit"
+          >
+            SEND
+          </button>
         </form>
-
       </div>
-      
-        
     </div>
   );
 }

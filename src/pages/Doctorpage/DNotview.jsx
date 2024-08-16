@@ -17,6 +17,36 @@ function DNotview() {
       }
     })();
   }, [notification]);
+  const formatTimeTo12Hour = (timeString) => {
+    // Try to parse the string as a full DateTime string first
+    const date = new Date(timeString);
+  
+    if (!isNaN(date.getTime())) {
+      let hours = date.getHours(); // Use getHours() for local time
+      let minutes = date.getMinutes();
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12; // '0' hour should be '12'
+      const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
+      return `${hours}:${minutesStr} ${ampm}`;
+    }
+  
+    // If date parsing fails, assume timeString is just HH:MM:SS
+    const timeParts = timeString.split(":");
+    if (timeParts.length >= 2) {
+      let hours = parseInt(timeParts[0], 10);
+      let minutes = parseInt(timeParts[1], 10);
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
+      return `${hours}:${minutesStr} ${ampm}`;
+    }
+  
+    // If all else fails, return a default or error message
+    console.error("Invalid time string:", timeString);
+    return "Invalid time";
+  };
   return (
     <div>
       <DHeader />
@@ -36,8 +66,8 @@ function DNotview() {
               className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
               key={not.id}
             >
-              <td className="px-10 py-3">{not.date}</td>
-              <td className="px-10 py-3">{not.Time}</td>
+              <td className="px-10 py-3">{new Date(not.date).toLocaleDateString()}</td>
+              <td className="px-10 py-3">{formatTimeTo12Hour(not.Time)}</td>
 
               <td className="px-10 py-3">{not.description}</td>
             </tr>

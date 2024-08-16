@@ -1,10 +1,12 @@
 import axios from "axios";
 import { useFormik } from "formik";
+import { useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import * as yup from "yup";
 
 function Usersignup() {
+  const [loading, setloading] = useState(false);
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
@@ -34,35 +36,42 @@ function Usersignup() {
         ),
       password2: yup
         .string()
-        .required()
+        .required("confirm your Password ")
         .oneOf([yup.ref("password1")], "password must be same"),
     }),
     onSubmit: async (values) => {
+      setloading(true);
       axios
         .post("http://127.0.0.1:8000/api/user_signup", values, {
           headers: { "Content-Type": "multipart/form-data" },
         })
-        .then((res) => {
-          console.log(res.data);
+        .then(() => {
+          setloading(false);
           toast.success("successfully signed up");
           navigate("/userlogin");
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          setloading(false);
+          toast.error("Something went wrong. Please try again.");
+        });
     },
   });
 
   console.log(formik.errors);
   return (
     <div>
-      <div className="flex flex-col gap-2 p-10 text-center">
-        <h1>Signup Here</h1>
-        <hr className="self-center border-1.5 gap-4 border-black w-[40%]" />
-
+      <div className="flex flex-col gap-2 p-10 bg-blue-400 min-h-screen  text-center  justify-center ">
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-2 w-[40%] text-left self-center"
+          className="flex flex-col gap-2 w-[40%] text-left shadow-2xl border backdrop-blur-lg p-5 rounded-2xl self-center"
         >
-          <label htmlFor="email">Email</label>
+          <h1 className="text-2xl font-bold text-white text-center ">Signup Here</h1>
+          <hr className="self-center border-1.5 gap-4 text-blue-300 w-[100%]" />
+          <div className="flex flex-row gap-2">
+            <i className="fa-solid fa-envelope self-center  text-white "></i>
+            <label className="font-semibold  text-white">Email</label>
+          </div>
           <input
             className="outline-none shadow py-1 px-2 shadow-black rounded"
             value={formik.values.email}
@@ -71,7 +80,11 @@ function Usersignup() {
             name="email"
           />
           <p className="text-red-600 ">{formik.errors.email}</p>
-          <label htmlFor="name">name</label>
+          <div className="flex flex-row gap-2">
+            <i className="fa-regular fa-user self-center  text-white "></i>
+
+            <label className="font-semibold  text-white">Userame</label>
+          </div>
           <input
             className="outline-none shadow py-1 px-2 shadow-black rounded"
             type="text"
@@ -80,8 +93,11 @@ function Usersignup() {
             onChange={formik.handleChange}
           />
           <p className="text-red-600 ">{formik.errors.username}</p>
+          <div className="flex flex-row gap-2">
+            <i className="fa-solid fa-mobile-screen-button self-center  text-white "></i>
 
-          <label htmlFor="mobile">Mobile</label>
+            <label className="font-semibold  text-white">Mobile</label>
+          </div>
           <input
             className="outline-none shadow py-1 px-2 shadow-black rounded"
             type="text"
@@ -90,8 +106,11 @@ function Usersignup() {
             onChange={formik.handleChange}
           />
           <p className="text-red-600 ">{formik.errors.mobile}</p>
+          <div className="flex flex-row gap-2">
+            <i className="fa-solid fa-lock self-center  text-white "></i>
 
-          <label htmlFor="text">Password</label>
+            <label className="font-semibold  text-white">Password</label>
+          </div>
           <input
             className="outline-none shadow py-1 px-2 shadow-black rounded"
             type="password"
@@ -100,8 +119,13 @@ function Usersignup() {
             onChange={formik.handleChange}
           />
           <p className="text-red-600 ">{formik.errors.password1}</p>
+          <div className="flex flex-row gap-2">
+            <i className="fa-solid fa-lock self-center  text-white "></i>
 
-          <label htmlFor="text">Confirm Password</label>
+            <label className="font-semibold  text-white">
+              confirm Password
+            </label>
+          </div>
           <input
             className="outline-none shadow py-1 px-2 shadow-black rounded"
             type="password"
@@ -110,11 +134,16 @@ function Usersignup() {
             onChange={formik.handleChange}
           />
           <p className="text-red-600 ">{formik.errors.password2}</p>
-
-          <button className="bg-blue-500 px-5 py-2 rounded" type="submit">
-            Signup
+          <button className="bg-white px-5 py-3 rounded" type="submit">
+          {loading ? (
+              <div className="flex justify-center items-center ">
+                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-blue-500"></div>
+              </div>
+            ) : (
+              "signup"
+            )}
           </button>
-          <p className="flex flex-row justify-between">
+          <p className="flex flex-row justify-between text-white">
             Already have an account?
             <span
               className="cursor-pointer"

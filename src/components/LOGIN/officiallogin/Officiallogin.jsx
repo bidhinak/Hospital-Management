@@ -12,6 +12,8 @@ function Officiallogin() {
   const admin = useSelector((state) => state.user);
   const doctor = useSelector((state) => state.user);
   const [visible, setvisible] = useState(false);
+  const [loading, setloading] = useState(false);
+
   const formik = useFormik({
     initialValues: { username: "", password1: "" },
     validationSchema: yup.object({
@@ -26,6 +28,7 @@ function Officiallogin() {
         ),
     }),
     onSubmit: (values) => {
+      setloading(true);
       axios
         .post("http://127.0.0.1:8000/api/doctor_login", values, {
           headers: {
@@ -33,7 +36,7 @@ function Officiallogin() {
           },
         })
         .then((res) => {
-          console.log(res);
+          setloading(false);
           if (res.data.status) {
             if (res.data.result.type == "admin") {
               dispatch(
@@ -44,6 +47,7 @@ function Officiallogin() {
               dispatch(
                 updateUser({
                   ...doctor,
+                  id: res.data.result.id,
                   username: res.data.result.name,
                   mobile: res.data.result.mobile,
                   email: res.data.result.email,
@@ -58,22 +62,32 @@ function Officiallogin() {
             toast.error(res.data.result);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => {
+          console.log(err);
+          setloading(false);
+          toast.error("Something went wrong. Please try again.");
+        });
     },
   });
 
   const navigate = useNavigate();
   return (
     <div>
-      <div className="flex flex-col gap-4 p-10 text-center">
-        <h1 className="text-2xl font-bold text-blue-400  ">Official login</h1>
-        <hr className="self-center border-1.5 gap-4 border-black w-[40%]" />
-
+      <div className=" flex flex-col gap-4  bg-gray-700 justify-center min-h-screen  ">
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 w-[40%] text-left self-center"
+          className="flex flex-col gap-4 w-[40%] h-[100%]  border-gray-200 shadow-2xl border backdrop-blur-lg p-5 rounded-2xl text-left self-center "
         >
-          <label htmlFor="text">Username</label>
+          <h1 className="text-2xl font-bold  text-white  text-center self-center  ">
+            Official login
+          </h1>
+          <hr className="self-center border-1.5 gap-4 border-gray-500 w-[100%]" />
+          <div className="flex flex-row gap-2">
+            <i className="fa-regular fa-user self-center  text-white "></i>
+
+            <label className="font-semibold  text-white">Username</label>
+          </div>
+
           <input
             className="outline-none shadow py-1 px-2 shadow-black rounded"
             type="text"
@@ -82,9 +96,13 @@ function Officiallogin() {
             onChange={formik.handleChange}
             value={formik.values.username}
           />
-          <p className="text-red-600">{formik.errors.username}</p>
 
-          <label htmlFor="password">Password</label>
+          <p className="text-red-600">{formik.errors.username}</p>
+          <div className="flex flex-row gap-2 ">
+            <i className="fa-solid fa-lock self-center  text-white"></i>
+
+            <label className="font-semibold  text-white">Password</label>
+          </div>
           <span className=" relative  ">
             <input
               className="rounded  shadow py-1 px-2 border shadow-black outline-none w-[100%]"
@@ -97,7 +115,7 @@ function Officiallogin() {
             <i
               className={`fa-solid ${
                 visible ? "fa-eye" : "fa-eye-slash"
-              } absolute top-2 right-1`}
+              } absolute top-2 right-1 cursor-pointer`}
               onClick={() => setvisible(!visible)}
             ></i>
           </span>
@@ -105,15 +123,22 @@ function Officiallogin() {
 
           <button
             type="submit"
-            className="p-3 bg-gray-600 rounded-md text-white"
+            disabled={loading}
+            className="p-3 bg-white rounded-md text-black text-xl"
           >
-            Login
+            {loading ? (
+              <div className="flex justify-center items-center ">
+                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-blue-500"></div>
+              </div>
+            ) : (
+              "Login"
+            )}
           </button>
-          <p className="flex flex-row justify-between">
+          <p className="flex flex-row justify-between text-white font-semibold">
             Dont have an account?Signup as
             <span className="flex flex-col gap-2">
               <span
-                className="cursor-pointer "
+                className="cursor-pointer underline  text-white"
                 onClick={() => navigate("/doctorsignup")}
               >
                 Doctor
