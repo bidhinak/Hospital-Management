@@ -39,7 +39,7 @@ function UDocprofile() {
       </div>
       ) : (
         <div className="flex flex-col gap-2 p-4  ">
-          <h1 className="hover:underline text-purple-950 text-3xl font-semibold text-center ">
+          <h1 className=" text-purple-950 text-3xl font-semibold text-center ">
             Details and schedules of {profile.name}
           </h1>
           <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  content-center">

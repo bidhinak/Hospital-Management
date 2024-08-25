@@ -5,7 +5,7 @@ import { initialState, updateUser } from "../../redux/slices/userSlice";
 import { useState } from "react";
 const navItems = [
   { page: "HOME", link: "/adashboard" },
-  { page: "ABOUT US", link: "/facilities" },
+  // { page: "ABOUT US", link: "/facilities" },
 ];
 function Adminpage() {
   const dispatch = useDispatch();
@@ -44,7 +44,10 @@ function Adminpage() {
                   }
                 >
                   <a className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <span className="flex justify-between">
                     LOGOUT
+                    <i className="fa-solid fa-right-from-bracket"></i>
+                    </span>
                   </a>
                 </li>
               </ul>

@@ -1,9 +1,9 @@
-import DHeader from "./DHeader";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-function DUpdatePassword() {
+import UHeader from "./UHeader";
+function UUpdatePassword() {
   const navigate = useNavigate();
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -16,7 +16,7 @@ function DUpdatePassword() {
     e.preventDefault();
 
     const response = await fetch(
-      `http://127.0.0.1:8000/api/docChangePassword/${id}/`,
+      `http://127.0.0.1:8000/api/userChangePassword/${id}/`,
       {
         method: "POST",
         headers: {
@@ -37,7 +37,7 @@ function DUpdatePassword() {
       toast.success("New Password Created");
       setSuccess(data.detail);
       setError(null);
-      navigate("/officiallogin");
+      navigate("/userlogin");
     } else {
       setError(data);
       setSuccess(null);
@@ -46,7 +46,7 @@ function DUpdatePassword() {
 
   return (
     <div>
-      <DHeader />
+      <UHeader />
       <div className="max-w-md mx-auto">
         <h2 className="text-3xl text-blue-600 font-bold mb-4 ">Change Password</h2>
         <form onSubmit={handleChangePassword}>
@@ -98,4 +98,4 @@ function DUpdatePassword() {
   );
 }
 
-export default DUpdatePassword;
+export default UUpdatePassword;

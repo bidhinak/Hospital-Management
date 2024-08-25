@@ -15,8 +15,8 @@ function Frontpage() {
             src="https://w0.peakpx.com/wallpaper/315/432/HD-wallpaper-medical-hospital.jpg"
             alt=""
           />
-          <button onClick={()=>navigate("/userlogin")} className="absolute bottom-8 left-8 bg-black text-white rounded-md p-3 ">
-            BOOK APPOINTMENTS
+          <button onClick={()=>navigate("/userlogin")} className="absolute hover:bg-emerald-50 hover:text-emerald-700  bottom-8 left-8 bg-black text-white rounded-md p-3 ">
+            BOOK APPOINTMENTS 
           </button>
         </div>
         <div className="text-center m-14 flex flex-col gap-4">

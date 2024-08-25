@@ -33,7 +33,7 @@ function DHeader() {
           >
             NOTIFICATION
           </li>
-          
+
           <div className="relative">
             <button
               onClick={toggleDropdown}
@@ -45,8 +45,11 @@ function DHeader() {
             {dropdown && (
               <ul className="absolute z-20 right-0 mt-2 w-48 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg">
                 <li onClick={() => navigate("/dprofileview")}>
-                  <a className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                    PROFILE
+                  <a className="block  px-4 py-2  text-gray-700 hover:bg-gray-100 cursor-pointer">
+                    <span className="flex  justify-between">
+                      PROFILE
+                      <i className="fa-solid fa-user-doctor"></i>
+                    </span>
                   </a>
                 </li>
                 <li
@@ -56,7 +59,10 @@ function DHeader() {
                   }}
                 >
                   <a className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
+                  <span className="flex justify-between">
                     LOGOUT
+                    <i className="fa-solid fa-right-from-bracket"></i>
+                    </span>
                   </a>
                 </li>
               </ul>

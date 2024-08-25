@@ -42,7 +42,7 @@ function UBookedSchedule() {
       const { data } = await axios.get(
         `http://127.0.0.1:8000/api/userscheduleview/${scheduleId}`
       );
-      setViews(data);
+      setViews(data);      
       setIsVisible(true);
     } catch (error) {
       console.log(error);
@@ -54,7 +54,7 @@ function UBookedSchedule() {
   return (
     <div>
       <UHeader />
-      <h1 className="text-2xl text-green-500 text-center hover:underline">
+      <h1 className="text-2xl text-green-500 text-center ">
         View Booked Schedules
       </h1>
 
@@ -65,11 +65,11 @@ function UBookedSchedule() {
           <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
         </div>
       ) : status.length > 0 ? (
-        <div className="grid  sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-1 gap-4">
+        <div className="place-items-start m-1   ">
           {status.map((s) => (
             <button
               key={s.id}
-              className="text-md bg-green-400 p-2 mx-auto cursor-pointer text-white rounded-lg"
+              className="text-md bg-green-600 hover:bg-green-900 hover:text-xl p-2 mx-auto cursor-pointer text-white rounded-2xl"
               onClick={() => view(s.schedule)}
             >
               Booking

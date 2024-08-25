@@ -31,8 +31,8 @@ function Anotadd() {
   return (
     <div>
       <Adminpage />
-      <div className="text-center flex flex-col gap-6">
-        <h1 className="text-pretty text-3xl underline text-green-500">Add your Notification </h1>
+      <div className="text-center flex flex-col gap-6 mt-5">
+        <h1 className="text-pretty text-3xl  text-green-500">Add your Notification </h1>
         <form onSubmit={formik.handleSubmit} className="flex flex-col gap-5">
           <label className="text-xl font-serif">Description</label>
           <input

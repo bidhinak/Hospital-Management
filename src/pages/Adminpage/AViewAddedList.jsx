@@ -51,7 +51,7 @@ function AViewAddedList() {
                 alt="no image"
               />
               <p
-                className="text-red-500 text-center cursor-pointer mt-4"
+                className="text-red-500 text-center hover:underline cursor-pointer mt-4"
                 onClick={() => navigate(`/ascheduleview/${s.details}`)}
               >
                 View Schedules

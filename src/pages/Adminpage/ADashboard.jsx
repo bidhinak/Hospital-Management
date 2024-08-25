@@ -67,6 +67,18 @@ function ADashboard() {
       <i className="fa-solid fa-calendar-days"></i>
     </span>
   </div>
+  <div
+    onClick={() => navigate("/viewusers")}
+    className="flex items-center justify-between bg-gradient-to-l from-yellow-800 to-yellow-400 cursor-pointer p-4 w-full md:w-[80%] rounded-lg shadow-lg hover:opacity-90 transition-opacity"
+    aria-label="View Schedule"
+  >
+    <span className="flex flex-col gap-4">
+      <h1 className="text-xl text-white font-bold">USERS</h1>
+      <p className="font-serif text-white">VIEW</p>
+    </span>
+    <span className="text-3xl text-white">
+    <i className="fa-solid fa-users"></i>    </span>
+  </div>
 </div>
 
     </div>

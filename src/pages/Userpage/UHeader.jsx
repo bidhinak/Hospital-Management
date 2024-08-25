@@ -76,7 +76,7 @@ function UHeader() {
         >
           <ul className="flex flex-col md:flex-row gap-2 md:gap-8">
             <li
-              className="cursor-pointer hover:text-gray-200"
+              className="cursor-pointer  hover:text-gray-200"
               onClick={() => navigate("/udashboard")}
             >
               HOME
@@ -122,7 +122,7 @@ function UHeader() {
                 <h1>{res.name}</h1>
                 <h2>{res.department}</h2>
                 <p
-                  className="cursor-pointer font-medium text-xl text-red-500 "
+                  className="cursor-pointer hover:underline font-medium text-xl text-red-500 "
                   onClick={() => navigate(`/udocprofile/${res.id}`)}
                 >
                   schedule view

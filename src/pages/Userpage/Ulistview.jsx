@@ -49,7 +49,7 @@ function Ulistview() {
                   alt={`Photo of Dr. ${l.name}`}
                 />
                 <p
-                  className="cursor-pointer font-medium text-xl text-red-500 mt-4 hover:text-red-700"
+                  className="cursor-pointer hover:underline font-medium text-xl text-red-500 mt-4 hover:text-red-700"
                   onClick={() => navigate(`/udocprofile/${l.id}`)}
                 >
                   Schedule View

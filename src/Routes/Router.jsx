@@ -28,6 +28,9 @@ import DBookView from "../pages/Doctorpage/DBookView";
 import UBookedSchedule from "../pages/Userpage/UBookedSchedule";
 import About from "../pages/Userpage/About";
 import DUpdatePassword from "../pages/Doctorpage/DUpdatePassword";
+import UUpdatePassword from "../pages/Userpage/UUpdatePassword";
+import ViewUsers from "../pages/Adminpage/ViewUsers";
+import UserBookings from "../pages/Adminpage/UserBookings";
 
 
 function Router() {
@@ -52,6 +55,7 @@ function Router() {
         <Route path="uprofile" element={<Uprofile/>}/>
         <Route path="ubookedschedule" element={<UBookedSchedule/>}/>
         <Route path="about" element={<About/>}/>
+        <Route path="userupdatepassword" element={<UUpdatePassword/>}/>
 
 
         {/* doctor */}
@@ -69,6 +73,8 @@ function Router() {
         <Route path="anotadd" element={<Anotadd/>}/>
         <Route path="anotview" element={<Anotview/>}/>
         <Route path="viewdoctors" element={<ViewDoctors/>}/>
+        <Route path="viewusers" element={<ViewUsers/>}/>
+        <Route path="userbookings/:id" element={<UserBookings/>}/>
         <Route path="aaddtolist/:id" element={<AAddToList/>}/>
         <Route path="aviewaddedlist" element={<AViewAddedList/>}/>
         <Route path="ascheduleview/:id" element={<Ascheduleview/>}/>
