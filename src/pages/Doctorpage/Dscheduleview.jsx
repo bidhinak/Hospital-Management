@@ -10,10 +10,10 @@ function Dscheduleview() {
   const navigate = useNavigate();
   const [schedule, setSchedule] = useState([]);
   const [loading, setloading] = useState(false);
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [popupVisibleId, setPopupVisibleId] = useState(null);
 
-  const togglePopup = () => {
-    setIsPopupVisible(!isPopupVisible);
+  const togglePopup = (id) => {
+    setPopupVisibleId(id);
   };
 
   useEffect(() => {
@@ -87,11 +87,10 @@ function Dscheduleview() {
       <DHeader />
       {loading ? (
         <div className="flex justify-center place-items-center items-center space-x-2 pt-40">
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce  "></div>
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce "></div>
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
-
-      </div>
+          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce  "></div>
+          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce "></div>
+          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
+        </div>
       ) : (
         <div className="relative overflow-x-auto  mx-20 my-8 rounded-md">
           <table className="w-full text-sm text-left rtl:text-right text-white dark:text-gray-400">
@@ -139,18 +138,28 @@ function Dscheduleview() {
                 <td className="px-10 py-3">
                   <button
                     className="bg-red-500 p-2 rounded-md text-white"
-                    onClick={togglePopup}
+                    onClick={() => togglePopup(s.id)}
                   >
                     DELETE
                   </button>
                 </td>
-                {isPopupVisible && (
+                {popupVisibleId === s.id && (
                   <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20">
                     <div className=" p-6 rounded-lg bg-white shadow-lg">
-                      <h2 className="text-2xl text-black font-semibold mb-4">Delete the Schedule?</h2>
+                      <h2 className="text-2xl text-black font-semibold mb-4">
+                        Delete the Schedule?
+                      </h2>
                       <span className="flex flex-row gap-10  pb-3 justify-evenly text-white text-xl">
-                        <button className="rounded-lg bg-gray-700 p-2 " onClick={togglePopup}>CLOSE</button>
-                        <button className="rounded-lg bg-red-700 px-4" onClick={() => deleteschedule(s.id)}>
+                        <button
+                          className="rounded-lg bg-gray-700 p-2 "
+                          onClick={()=>togglePopup(null)}
+                        >
+                          CLOSE
+                        </button>
+                        <button
+                          className="rounded-lg bg-red-700 px-4"
+                          onClick={() => deleteschedule(s.id)}
+                        >
                           YES
                         </button>
                       </span>

@@ -12,12 +12,13 @@ function DNotview() {
           "http://127.0.0.1:8000/api/Notificationdetails"
         );
         setNot(data);
+         
         
       } catch (error) {
         console.log(error);
       }
     })();
-  }, [notification]);
+  }, []);
   const formatTimeTo12Hour = (timeString) => {
     // Try to parse the string as a full DateTime string first
     const date = new Date(timeString);

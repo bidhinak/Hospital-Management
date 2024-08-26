@@ -18,7 +18,7 @@ function Anotadd() {
           },
         })
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data) {
             toast.success("notification successfully sended");
             formik.resetForm();

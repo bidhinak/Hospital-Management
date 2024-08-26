@@ -40,7 +40,11 @@ function Officiallogin() {
           if (res.data.status) {
             if (res.data.result.type == "admin") {
               dispatch(
-                updateUser({ ...admin, username: res.data.result.name })
+                updateUser({
+                  ...admin,
+                  id: res.data.result.id,
+                  username: res.data.result.name,
+                })
               );
               navigate("/adashboard");
             } else if (res.data.result.type == "doctor") {

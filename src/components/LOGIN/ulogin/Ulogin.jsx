@@ -66,10 +66,10 @@ function Ulogin() {
   const navigate = useNavigate();
   return (
     <div>
-      <div className=" flex flex-col gap-4 bg-blue-400 min-h-screen  text-center  justify-center  ">
+      <div className=" flex flex-col gap-4  bg-blue-400 min-h-screen  text-center  justify-center  ">
         <form
           onSubmit={formik.handleSubmit}
-          className="flex flex-col gap-4 w-[40%] shadow-2xl border backdrop-blur-lg p-5 rounded-2xl text-left self-center"
+          className="flex flex-col gap-4 w-[40%]  shadow-2xl border backdrop-blur-lg p-4 rounded-2xl text-left self-center"
         >
           <h1 className="text-2xl font-bold text-white text-center  ">login</h1>
           <hr className="self-center border-1.5 gap-4 text-blue-300  w-[100%]" />
@@ -91,7 +91,7 @@ function Ulogin() {
             <i className="fa-solid fa-lock self-center  text-white"></i>
 
             <label className="font-semibold  text-white">Password</label>
-          </div>{" "}
+          </div>
           <span className=" relative  ">
             <input
               className="rounded  shadow py-1 px-2 border shadow-black outline-none w-[100%]"

@@ -78,7 +78,7 @@ function Dprofileview() {
       );
 
       if (response.status === 200) {
-        console.log(response);
+        // console.log(response);
         dispatch(
           updateUser({
             id: response.data.id,
@@ -117,7 +117,7 @@ function Dprofileview() {
       if (response) {
         console.log(photo.path);
         
-        console.log(response);
+        // console.log(response);
       }
     } catch (error) {
       console.log(error);
@@ -197,7 +197,7 @@ function Dprofileview() {
     <div>
       <DHeader />
       {isPopupOpen && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className=" absolute z-20 inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-80">
             <h2 className="text-2xl font-semibold mb-4 text-center">
               Update Profile
@@ -320,9 +320,9 @@ function Dprofileview() {
                 </span>
               </span>
             ) : (
-              <span>
+              <span className=" " >
                 <img
-                  className="p-4 rounded-full border object-contain"
+                  className="p-4  rounded-full border object-contain"
                   src={`http://127.0.0.1:8000${photo}`}
                   alt="no image"
                 />

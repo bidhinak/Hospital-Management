@@ -6,7 +6,7 @@ import * as yup from "yup";
 import { useState } from "react";
 
 function Doctorsignup() {
-  const [showPassword, setShowPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const[loading,setloading]=useState(false);
   const navigate = useNavigate();
   const formik = useFormik({
@@ -165,20 +165,23 @@ function Doctorsignup() {
 
             <label className="font-semibold  text-white">Password</label>
           </div>
-          <span className="relative">
+          <span className=" relative  ">
             <input
-              className="outline-none shadow py-1 px-2 shadow-black rounded w-[100%]"
-              type={showPassword ? "text" : "password"}
+              className="rounded  shadow py-1 px-2 border shadow-black outline-none w-[100%]"
               name="password1"
-              value={formik.values.password1}
+              autoSave="password1"
+              type={showPassword ? "text" : "password"}
               onChange={formik.handleChange}
+              value={formik.values.password1}
             />
-            <input
-              className="absolute right-1 top-3 "
-              type="checkbox"
-              value={showPassword}
-              onChange={() => setShowPassword((prev) => !prev)}
-            />
+            <i
+              className={`fa-solid  ${
+                showPassword ? "fa-eye" : "fa-eye-slash"
+              } absolute right-1 top-2 `}
+              onClick={() => {
+                setShowPassword(!showPassword);
+              }}
+            ></i>
           </span>
           <p className="text-red-600 ">{formik.errors.password1}</p>
           <div className="flex flex-row gap-2">

@@ -44,7 +44,7 @@ function Ulistview() {
                 <h1 className="font-bold text-lg">{l.name}</h1>
                 <h2 className="font-serif">{l.department}</h2>
                 <img
-                  className="w-full h-56 object-contain rounded-md"
+                  className="w-full h-56 object-contain rounded-md "
                   src={`http://127.0.0.1:8000${l.photo}`}
                   alt={`Photo of Dr. ${l.name}`}
                 />

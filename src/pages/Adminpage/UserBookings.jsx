@@ -71,7 +71,7 @@ function UserBookings() {
       ) : (
         <div className="text-center pt-52">
           <h1 className="text-4xl font-semibold text-red-500">
-            You have no bookings in this schedule!.
+            This user have no bookings!.
           </h1>
           <p className="text-gray-600 text-2xl">Check later.</p>
         </div>

@@ -15,7 +15,7 @@ function Anotview() {
           "http://127.0.0.1:8000/api/Notificationdetails"
         );
         setNot(data);
-        console.log(data);
+        // console.log(data);
       } catch (error) {
         console.error("Error fetching notifications:", error);
         toast.error("Failed to fetch notifications");

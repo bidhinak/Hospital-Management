@@ -32,21 +32,43 @@ function UHeader() {
       handleSearch();
     }
   };
-
+  const [visibleHome, setVisibleHome] = useState(false);
+  const showHome = () => setVisibleHome(true);
+  const hideHome = () => setVisibleHome(false);
+  const [visibleschedule, setvisibleschedule] = useState(false);
+  const showschedule = () => setvisibleschedule(true);
+  const hideschedule = () => setvisibleschedule(false);
+  const [visibleprofile, setvisibleprofile] = useState(false);
+  const showprofile = () => setvisibleprofile(true);
+  const hideprofile = () => setvisibleprofile(false);
+  const [visiblelogout, setvisiblelogout] = useState(false);
+  const showlogout = () => setvisiblelogout(true);
+  const hidelogoout = () => setvisiblelogout(false);
+  const [visiblesearch, setvisiblesearch] = useState(false);
+  const showsearch = () => setvisiblesearch(true);
+  const hidesearch = () => setvisiblesearch(false);
   return (
     <div>
       <div className=" flex flex-row justify-between p-8 bg-gradient-to-t from-blue-300 bg-blue-700 text-white">
-        <h1>HOSPITAL MANAGEMENT</h1>
+        <h1 className="shadow-md rounded-md p-2">HOSPITAL MANAGEMENT</h1>
         <span className=" relative ">
-          <input
-            type="search"
-            name="q"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyPress={handleKeyPress}
-            placeholder="search doctors or departments..."
-            className=" bg-white text-black rounded-3xl px-3 py-1.5   outline-none"
-          />
+          {visiblesearch ? (
+            <span onMouseLeave={hidesearch}>
+              <input
+                type="search"
+                name="q"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="doctors or departments..."
+                className=" bg-white text-black rounded-2xl px-3 py-1.5   outline-none"
+              />
+            </span>
+          ) : (
+            <span onMouseOver={showsearch}>
+              <i className="ml-2 shadow-md border rounded-full p-2 fa-solid fa-magnifying-glass text-xl cursor-pointer"></i>
+            </span>
+          )}
         </span>
 
         <button
@@ -75,39 +97,71 @@ function UHeader() {
           } md:flex md:flex-row md:ml-auto w-full md:w-auto`}
         >
           <ul className="flex flex-col md:flex-row gap-2 md:gap-8">
-            <li
-              className="cursor-pointer  hover:text-gray-200"
-              onClick={() => navigate("/udashboard")}
-            >
-              HOME
-            </li>
+            {visibleHome ? (
+              <span onMouseLeave={hideHome}>
+                <li
+                  className="cursor-pointer  "
+                  onClick={() => navigate("/udashboard")}
+                >
+                  HOME
+                </li>
+              </span>
+            ) : (
+              <span onMouseOver={showHome}>
+                <i className="fa-solid shadow-md fa-house-user text-xl cursor-pointer"></i>
+              </span>
+            )}
             {/* <li
               className="cursor-pointer hover:text-gray-200"
               onClick={() => navigate("/about")}
             >
               ABOUT US
             </li> */}
-            <li
-              className="cursor-pointer hover:text-gray-200"
-              onClick={() => navigate("/ubookedschedule")}
-            >
-              SCHEDULE
-            </li>
-            <li
-              className="cursor-pointer hover:text-gray-200"
-              onClick={() => navigate("/uprofile")}
-            >
-              PROFILE
-            </li>
-            <li
-              className="cursor-pointer hover:text-gray-200"
-              onClick={() => {
-                dispatch(updateUser(initialState));
-                navigate("/");
-              }}
-            >
-              LOGOUT
-            </li>
+            {visibleschedule ? (
+              <span onMouseLeave={hideschedule}>
+                <li
+                  className="cursor-pointer "
+                  onClick={() => navigate("/ubookedschedule")}
+                >
+                  SCHEDULE
+                </li>
+              </span>
+            ) : (
+              <span onMouseOver={showschedule}>
+                <i className="fa-solid shadow-md fa-calendar-day text-xl cursor-pointer"></i>
+              </span>
+            )}
+            {visibleprofile ? (
+              <span onMouseLeave={hideprofile}>
+                <li
+                  className="cursor-pointer "
+                  onClick={() => navigate("/uprofile")}
+                >
+                  PROFILE
+                </li>
+              </span>
+            ) : (
+              <span onMouseOver={showprofile}>
+                <i className="fa-solid shadow-md fa-id-card text-xl cursor-pointer"></i>
+              </span>
+            )}
+            {visiblelogout ? (
+              <span onMouseLeave={hidelogoout}>
+                <li
+                  className="cursor-pointer "
+                  onClick={() => {
+                    dispatch(updateUser(initialState));
+                    navigate("/");
+                  }}
+                >
+                  LOGOUT
+                </li>
+              </span>
+            ) : (
+              <span onMouseOver={showlogout}>
+                <i className="fa-solid shadow-md fa-right-from-bracket text-xl cursor-pointer"></i>
+              </span>
+            )}
           </ul>
         </nav>
       </div>
@@ -130,7 +184,6 @@ function UHeader() {
               </div>
             ))}
           </li>
-          
         </ul>
       </div>
     </div>

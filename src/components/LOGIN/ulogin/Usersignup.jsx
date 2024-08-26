@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 import * as yup from "yup";
 
 function Usersignup() {
+  const [showPassword, setShowPassword] = useState(false);
+
   const [loading, setloading] = useState(false);
   const navigate = useNavigate();
   const formik = useFormik({
@@ -66,7 +68,9 @@ function Usersignup() {
           onSubmit={formik.handleSubmit}
           className="flex flex-col gap-2 w-[40%] text-left shadow-2xl border backdrop-blur-lg p-5 rounded-2xl self-center"
         >
-          <h1 className="text-2xl font-bold text-white text-center ">Signup Here</h1>
+          <h1 className="text-2xl font-bold text-white text-center ">
+            Signup Here
+          </h1>
           <hr className="self-center border-1.5 gap-4 text-blue-300 w-[100%]" />
           <div className="flex flex-row gap-2">
             <i className="fa-solid fa-envelope self-center  text-white "></i>
@@ -111,13 +115,24 @@ function Usersignup() {
 
             <label className="font-semibold  text-white">Password</label>
           </div>
-          <input
-            className="outline-none shadow py-1 px-2 shadow-black rounded"
-            type="password"
-            name="password1"
-            value={formik.values.password1}
-            onChange={formik.handleChange}
-          />
+          <span className=" relative  ">
+            <input
+              className="rounded  shadow py-1 px-2 border shadow-black outline-none w-[100%]"
+              name="password1"
+              autoSave="password1"
+              type={showPassword ? "text" : "password"}
+              onChange={formik.handleChange}
+              value={formik.values.password1}
+            />
+            <i
+              className={`fa-solid  ${
+                showPassword ? "fa-eye" : "fa-eye-slash"
+              } absolute right-1 top-2 `}
+              onClick={() => {
+                setShowPassword(!showPassword);
+              }}
+            ></i>
+          </span>
           <p className="text-red-600 ">{formik.errors.password1}</p>
           <div className="flex flex-row gap-2">
             <i className="fa-solid fa-lock self-center  text-white "></i>
@@ -135,7 +150,7 @@ function Usersignup() {
           />
           <p className="text-red-600 ">{formik.errors.password2}</p>
           <button className="bg-white px-5 py-3 rounded" type="submit">
-          {loading ? (
+            {loading ? (
               <div className="flex justify-center items-center ">
                 <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-blue-500"></div>
               </div>

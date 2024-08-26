@@ -38,7 +38,7 @@ function Ascheduleview() {
 
       </div>
       ) : list.length !== 0 ? (
-        <div className="flex flex-row gap-5 p-2 ">
+        <div className="grid grid-flow-row sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-10 gap-5 p-2   ">
           {list.map((l) => (
             <div
               key={l.id}
