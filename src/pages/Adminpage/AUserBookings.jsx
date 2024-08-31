@@ -1,9 +1,10 @@
+/* eslint-disable no-empty */
 import axios from "axios";
 import Adminpage from "./Adminpage";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
-function UserBookings() {
+function AUserBookings() {
   const { id } = useParams();
   const [book, setBook] = useState([]);
   const [isVisible, setIsVisible] = useState(false);
@@ -23,7 +24,6 @@ function UserBookings() {
         );
         setBook(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
@@ -42,7 +42,6 @@ function UserBookings() {
 
       setIsVisible(true);
     } catch (error) {
-      console.log(error);
     }
   };
 
@@ -57,17 +56,25 @@ function UserBookings() {
           <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
         </div>
       ) : book.length > 0 ? (
-        <div className="flex flex-wrap gap-2  justify-center m-1 ">
-          {book.map((b) => (
-            <button
-              key={b.id}
-              className="text-md bg-green-400 w-full md:w-auto p-2 cursor-pointer hover:bg-green-300 text-white rounded-lg"
-              onClick={() => view(b.schedule)}
-            >
-              Booking 
-            </button>
+        
+        <div className="ml-5">
+        <h1 className="font-semibold text-xl">
+          Select to see the Bookings 
+        </h1>
+        <select
+          className="text-md bg-green-700 outline-none hover:bg-green-500 px-4 py-2 cursor-pointer text-white rounded-2xl"
+          onChange={(e) => view(e.target.value)}
+        >
+          <option  disabled selected>
+            Select
+          </option>
+          {book.map((s, index) => (
+            <option key={s.id} value={s.schedule}>
+              Booking {index + 1}
+            </option>
           ))}
-        </div>
+        </select>
+      </div>
       ) : (
         <div className="text-center pt-52">
           <h1 className="text-4xl font-semibold text-red-500">
@@ -85,7 +92,7 @@ function UserBookings() {
               className="flex flex-col gap-4  bg-gray-400 p-5 mt-2 rounded-lg text-center w-full sm:w-[50%] md:w-[70%] lg:w-[50%] mx-auto"
             >
               <div className="flex flex-col md:flex-row items-center gap-3">
-                <label className=" w-full md:w-1/3 text-right">DOCTOR NAME:</label>
+                <label className=" w-full md:w-1/3 text-center">DOCTOR NAME</label>
                 <input
                   className="w-full md:flex-grow rounded-md text-center shadow-xl text-xl p-2"
                   type="text"
@@ -95,7 +102,7 @@ function UserBookings() {
                 />
               </div>
               <div className="flex flex-col md:flex-row items-center gap-3">
-                <label className="w-full md:w-1/3 text-right">DATE:</label>
+                <label className="w-full md:w-1/3 text-center">DATE</label>
                 <input
                   className="w-full md:flex-grow text-center rounded-md shadow-xl text-xl p-2"
                   type="date"
@@ -105,7 +112,7 @@ function UserBookings() {
                 />
               </div>
               <div className="flex flex-col md:flex-row items-center gap-3">
-                <label className="w-full md:w-1/3 text-right">TIME:</label>
+                <label className="w-full md:w-1/3 text-center">TIME</label>
                 <input
                   className="w-full md:flex-grow text-center rounded-md shadow-xl text-xl p-2"
                   type="time"
@@ -115,7 +122,7 @@ function UserBookings() {
                 />
               </div>
               <div className="flex flex-col md:flex-row items-center gap-3">
-                <label className="w-full md:w-1/3 text-right">FEE:</label>
+                <label className="w-full md:w-1/3 text-center">FEE</label>
                 <input
                   className="w-full md:flex-grow text-center rounded-md shadow-xl text-xl p-2"
                   type="text"
@@ -138,4 +145,4 @@ function UserBookings() {
   );
 }
 
-export default UserBookings;
+export default AUserBookings;

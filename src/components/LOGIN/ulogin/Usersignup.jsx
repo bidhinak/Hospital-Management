@@ -52,15 +52,13 @@ function Usersignup() {
           toast.success("successfully signed up");
           navigate("/userlogin");
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           setloading(false);
           toast.error("Something went wrong. Please try again.");
         });
     },
   });
 
-  console.log(formik.errors);
   return (
     <div>
       <div className="flex flex-col gap-2 p-10 bg-blue-400 min-h-screen  text-center  justify-center ">

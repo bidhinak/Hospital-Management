@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 function Dscheduleadd() {
   const { username } = useSelector((state) => state.user);
   const id = useSelector((state) => state.user.id);
+
   const formik = useFormik({
     initialValues: {
       user: id,
@@ -17,21 +18,19 @@ function Dscheduleadd() {
       fee: "",
     },
     validationSchema: yup.object({
-      date: yup.date().required(),
-      time: yup.string().required(),
-      fee: yup.string().required(),
+      date: yup.date().required("Date is required"),
+      time: yup.string().required("Time is required"),
+      fee: yup.string().required("Fee is required"),
     }),
     onSubmit: async (values) =>
       axios
         .post("http://127.0.0.1:8000/api/doctorscheduleadd", values, {})
-
-        .then((res) => {
+        .then(() => {
           formik.resetForm();
-          toast.success("schedule added successfully");
-          console.log(res);
+          toast.success("Schedule added successfully");
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
+          toast.error("Failed to add schedule");
         }),
   });
 
@@ -40,65 +39,74 @@ function Dscheduleadd() {
       <DHeader />
       <form
         onSubmit={formik.handleSubmit}
-        className="flex flex-col gap-4 text-center "
+        className="flex  bg-gray-300 p-5   flex-col gap-5  shadow-lg rounded-lg max-w-lg mx-auto mt-2 "
       >
-        <h1 className="text-green-600 font-bold text-2xl underline">
-          Create new Schedule
+        <h1 className="text-green-600 font-bold text-2xl text-center">
+          Create New Schedule
         </h1>
-        <label className="font-bold hidden">user id </label>
-        <input
-          className="hidden self-center"
-          type="text"
-          name="user"
-          onChange={formik.handleChange}
-          value={formik.values.user}
-          readOnly
-        />
-        <label className="font-bold">NAME OF DOCTOR</label>
-        <input
-          className="w-[20%] self-center text-center outline-none rounded-md shadow-md py-2"
-          type="text"
-          name="doctor_name"
-          value={formik.values.doctor_name}
-          readOnly
-        />
-        <label className="font-bold">DATE</label>
-        <input
-          className="self-center"
-          type="date"
-          name="date"
-          onChange={formik.handleChange}
-          value={formik.values.date}
-        />
-        <p className="text-red-600">{formik.errors.date}</p>
-        <label className="font-bold">TIME</label>
-        <input
-          className="self-center "
-          type="time"
-          name="time"
+        <fieldset className="flex flex-col gap-4">
+          <legend className="font-bold hidden">User ID</legend>
+          <input
+            className="hidden"
+            type="text"
+            name="user"
+            onChange={formik.handleChange}
+            value={formik.values.user}
+            readOnly
+          />
 
-          onChange={formik.handleChange}
-          value={formik.values.time}
-        />
+          <label className="font-bold">Doctor Name</label>
+          <input
+            className="w-full text-center outline-none rounded-md shadow-md py-2"
+            type="text"
+            name="doctor_name"
+            value={formik.values.doctor_name}
+            readOnly
+          />
 
-        <p className="text-red-600">{formik.errors.time}</p>
+          <label className="font-bold">Date</label>
+          <input
+            className="w-full text-center outline-none rounded-md shadow-md py-2"
+            type="date"
+            name="date"
+            onChange={formik.handleChange}
+            value={formik.values.date}
+          />
+          {formik.errors.date && (
+            <p className="text-red-600 text-sm">{formik.errors.date}</p>
+          )}
 
-        <label className="font-bold">FEE</label>
-        <input
-          className="w-[20%] self-center outline-none rounded-md shadow-md py-2"
-          type="text"
-          name="fee"
-          placeholder="eg:200"
-          onChange={formik.handleChange}
-          value={formik.values.fee}
-        />
-        <p className="text-red-600">{formik.errors.fee}</p>
+          <label className="font-bold">Time</label>
+          <input
+            className="w-full text-center outline-none rounded-md shadow-md py-2"
+            type="time"
+            name="time"
+            onChange={formik.handleChange}
+            value={formik.values.time}
+          />
+          {formik.errors.time && (
+            <p className="text-red-600 text-sm">{formik.errors.time}</p>
+          )}
+
+          <label className="font-bold">Fee</label>
+          <input
+            className="w-full text-center outline-none rounded-md shadow-md py-2"
+            type="text"
+            name="fee"
+            placeholder="e.g., 200"
+            onChange={formik.handleChange}
+            value={formik.values.fee}
+          />
+          {formik.errors.fee && (
+            <p className="text-red-600 text-sm">{formik.errors.fee}</p>
+          )}
+        </fieldset>
 
         <button
-          className="bg-green-400 p-3 w-[20%] text-white rounded-lg self-center "
+          className="bg-green-500 p-3 w-full text-white rounded-lg hover:bg-green-600 transition-colors"
           type="submit"
         >
-          ADD
+          Add Schedule
         </button>
       </form>
     </div>

@@ -6,66 +6,85 @@ import Adminpage from "./Adminpage";
 function Ascheduleview() {
   const { id } = useParams();
   const [list, setList] = useState([]);
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     (async () => {
-      setloading(true);
+      setLoading(true);
       try {
         const { data } = await axios.get(
           `http://127.0.0.1:8000/api/doctorscheduleget/${id}`
         );
         if (data) {
           setList(data);
-        } else {
-          console.log(data.error);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        // Handle error if needed
       } finally {
-        setloading(false);
+        setLoading(false);
       }
     })();
   }, [id]);
 
+  const formatTimeTo12Hour = (timeString) => {
+    const date = new Date(`1970-01-01T${timeString}Z`);
+    if (!isNaN(date.getTime())) {
+      let hours = date.getUTCHours();
+      let minutes = date.getUTCMinutes();
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
+      return `${hours}:${minutesStr} ${ampm}`;
+    }
+    return "Invalid time";
+  };
+
   return (
-    <div>
+    <div className=" ">
       <Adminpage />
       {loading ? (
-        <div className="flex justify-center place-items-center items-center space-x-2 pt-40">
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce  "></div>
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce "></div>
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
-
-      </div>
-      ) : list.length !== 0 ? (
-        <div className="grid grid-flow-row sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-10 gap-5 p-2   ">
+        <div className="flex justify-center items-center ">
+          <div className="flex space-x-2">
+            <div className="w-4 h-4 bg-blue-600 rounded-full animate-bounce"></div>
+            <div className="w-4 h-4 bg-blue-600 rounded-full animate-bounce"></div>
+            <div className="w-4 h-4 bg-blue-600 rounded-full animate-bounce delay-200"></div>
+          </div>
+        </div>
+      ) : list.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
           {list.map((l) => (
             <div
               key={l.id}
-              className="flex flex-col gap-3 bg-red-300 p-3 rounded-md "
+              className="bg-white shadow-md rounded-lg p-5 flex flex-col items-center text-gray-800"
             >
-              <label className="text-lg font-semibold">DATE</label>
-
-              <h1 className="text-center  text-lg shadow-lg  px-3 py-1 rounded-md shadow-gray-500 font-normal">
-                {l.date}
-              </h1>
-              <label className="text-lg font-semibold">TIME</label>
-
-              <h1 className="text-center text-lg shadow-lg  px-3 py-1 rounded-md shadow-gray-500 font-normal">
-                {l.time}
-              </h1>
-              <label className="text-lg font-semibold">FEE</label>
-
-              <h1 className="text-center text-lg shadow-lg  px-3 py-1 rounded-md shadow-gray-500 font-normal">
-                {l.fee}
-              </h1>
+              <div className="w-full flex flex-col items-center">
+                <label className="text-lg font-semibold text-blue-600">
+                  DATE
+                </label>
+                <h1 className="text-xl font-medium mt-1">{l.date}</h1>
+              </div>
+              <div className="w-full flex flex-col items-center mt-4">
+                <label className="text-lg font-semibold text-blue-600">
+                  TIME
+                </label>
+                <h1 className="text-xl font-medium mt-1">
+                  {formatTimeTo12Hour(l.time)}
+                </h1>
+              </div>
+              <div className="w-full flex flex-col items-center mt-4">
+                <label className="text-lg font-semibold text-blue-600">
+                  FEE
+                </label>
+                <h1 className="text-xl font-medium mt-1">{l.fee}</h1>
+              </div>
             </div>
           ))}
         </div>
       ) : (
         <div className="text-center pt-52">
-          <h1 className="text-4xl font-semibold text-blue-500">
-            No schedules Added yet.
+          <h1 className="text-3xl font-semibold text-blue-500">
+            No schedules added yet.
           </h1>
         </div>
       )}

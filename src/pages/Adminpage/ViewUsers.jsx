@@ -5,15 +5,15 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
 function ViewUsers() {
-    const navigate=useNavigate();
-    const [profile, setProfile] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [popupVisibleId, setPopupVisibleId] = useState(null);
-
+  const navigate = useNavigate();
+  const [profile, setProfile] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [popupVisibleId, setPopupVisibleId] = useState(null);
 
   const togglePopup = (id) => {
     setPopupVisibleId(id);
   };
+
   const deletePost = async (id) => {
     try {
       const { status } = await axios.delete(
@@ -21,107 +21,109 @@ function ViewUsers() {
       );
       if (status === 204) {
         setProfile((prev) => prev.filter((x) => x.id !== id));
-        toast.success("User removed from the list successfully");
+        toast.success("User removed successfully");
       } else {
         toast.error("Failed to remove the user");
       }
     } catch (error) {
-      console.log(error);
+      toast.error("An error occurred while removing the user");
     } finally {
       setPopupVisibleId(null);
     }
   };
-  
-    useEffect(() => {
-        (async () => {
-          setLoading(true);
-          try {
-            const { data } = await axios.get(
-              "http://127.0.0.1:8000/api/userdetails"
-            );
-            setProfile(data);
-          } catch (error) {
-            console.error("Error fetching data:", error);
-          } finally {
-            setLoading(false);
-          }
-        })();
-      }, []);
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      try {
+        const { data } = await axios.get("http://127.0.0.1:8000/api/userdetails");
+        setProfile(data.reverse());
+      } catch (error) {
+        toast.error("Failed to fetch user details");
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
   return (
     <div>
       <Adminpage />
-      <h1 className="font-serif text-center  text-yellow-700 text-2xl">
+      <h1 className="font-serif text-center text-yellow-700 text-3xl my-6">
         View Users
       </h1>
       {loading ? (
-        <div className="flex justify-center place-items-center items-center space-x-2 pt-40">
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce  "></div>
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce "></div>
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
-
-      </div>
+        <div className="flex justify-center items-center h-screen">
+          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce mr-1"></div>
+          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce mr-1"></div>
+          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce"></div>
+        </div>
       ) : (
-        <div className="relative  overflow-x-auto mx-10 my-8 rounded-md">
-          <table className="w-full text-sm text-left rtl:text-right text-white dark:text-gray-400">
-            <thead className="text-xs text-white uppercase bg-gray-50 dark:bg-yellow-600 dark:text-white">
+        <div className="relative overflow-x-auto mx-4 md:mx-20 my-8 rounded-md shadow-lg bg-white dark:bg-gray-900">
+          <table className="min-w-full text-sm text-left text-gray-700 dark:text-gray-200">
+            <thead className="text-xs text-gray-100 uppercase bg-yellow-600 dark:bg-yellow-700">
               <tr>
-                <th scope="col" className="px-10 py-3">Name</th>
-                <th scope="col" className="px-10 py-3">Mobile</th>
-                <th scope="col" className="px-10 py-3">Email</th>
-                <th scope="col" className="px-10 py-3">Bookings</th>
-                <th scope="col" className="px-10 py-3">Remove</th>
-
-       
+                <th scope="col" className="px-6 py-3">Name</th>
+                <th scope="col" className="px-6 py-3">Mobile</th>
+                <th scope="col" className="px-6 py-3">Email</th>
+                <th scope="col" className="px-6 py-3">Bookings</th>
+                <th scope="col" className="px-6 py-3 text-center">Remove</th>
               </tr>
             </thead>
-            {profile.map((pro) => (
-              <tbody
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                key={pro.id}
-              >
-                <td className="px-10 py-3">{pro.username}</td>
-                <td className="px-10 py-3">{pro.mobile}</td>
-                <td className="px-10 py-3">{pro.email}</td>
-                <td onClick={()=>navigate(`/userbookings/${pro.id}`)}  className=" px-10 py-3"><button className="bg-gray-600 p-3 rounded-lg text-white">view</button></td>
-                <td className="px-10 py-3">
-                  <button
-                    className="text-white bg-red-600 p-2 rounded-lg"
-                    onClick={() => togglePopup(pro.id)}
-                  >
-                    DELETE
-                  </button>
-                </td>
-                {popupVisibleId === pro.id && (
-                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                      <h2 className="text-2xl mb-4">Are you sure?</h2>
-                      <div className="flex flex-row gap-10 justify-evenly pb-3 text-white text-xl">
-                        <button
-                          className="bg-gray-500 p-2 rounded-lg"
-                          onClick={() => togglePopup(null)}
-                        >
-                          CLOSE
-                        </button>
-                        <button
-                          className="bg-red-700 p-2 rounded-lg"
-                          onClick={() => deletePost(pro.id)}
-                        >
-                          YES
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-               
-                
-                
-              </tbody>
-            ))}
+            <tbody>
+              {profile.map((pro) => (
+                <tr
+                  className="bg-white dark:bg-gray-800 border-b dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 ease-in-out"
+                  key={pro.id}
+                >
+                  <td className="px-6 py-3">{pro.username}</td>
+                  <td className="px-6 py-3">{pro.mobile}</td>
+                  <td className="px-6 py-3">{pro.email}</td>
+                  <td className="px-6 py-3 text-center">
+                    <button
+                      className="bg-gray-600 hover:bg-gray-700 text-white py-1 px-3 rounded-lg shadow-md transition-all duration-200 ease-in-out"
+                      onClick={() => navigate(`/auserbookings/${pro.id}`)}
+                    >
+                      View
+                    </button>
+                  </td>
+                  <td className="px-6 py-3 text-center">
+                    <button
+                      className="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded-lg shadow-md transition-all duration-200 ease-in-out"
+                      onClick={() => togglePopup(pro.id)}
+                    >
+                      DELETE
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
         </div>
       )}
+      {popupVisibleId && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80">
+            <h2 className="text-2xl font-semibold text-center text-gray-800 dark:text-gray-200 mb-4">Are you sure?</h2>
+            <div className="flex justify-evenly">
+              <button
+                className="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-lg shadow-md transition-all duration-200 ease-in-out"
+                onClick={() => togglePopup(null)}
+              >
+                Close
+              </button>
+              <button
+                className="bg-red-700 hover:bg-red-800 text-white py-2 px-4 rounded-lg shadow-md transition-all duration-200 ease-in-out"
+                onClick={() => deletePost(popupVisibleId)}
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-  )
+  );
 }
 
-export default ViewUsers
+export default ViewUsers;

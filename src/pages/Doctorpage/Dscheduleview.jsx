@@ -9,166 +9,292 @@ function Dscheduleview() {
   const id = useSelector((state) => state.user.id);
   const navigate = useNavigate();
   const [schedule, setSchedule] = useState([]);
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [popupVisibleId, setPopupVisibleId] = useState(null);
+  const [reportedSchedules, setReportedSchedules] = useState([]);
+  const [statusData, setStatusData] = useState({
+    date: "",
+    time: "",
+    fee: "",
+    schedule_id: "",
+    doc_id: id,
+  });
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const openPopup = (schedule) => {
+    setStatusData({
+      date: schedule.date,
+      time: formatTimeTo12Hour(schedule.time),
+      fee: schedule.fee,
+      schedule_id: schedule.id,
+      doc_id: id,
+    });
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
 
   const togglePopup = (id) => {
     setPopupVisibleId(id);
   };
 
   useEffect(() => {
-    (async () => {
+    const fetchSchedule = async () => {
       try {
-        setloading(true);
+        setLoading(true);
         const { data } = await axios.get(
-          `http://127.0.0.1:8000/api/doctorscheduleget/${id}`,
-          {}
+          `http://127.0.0.1:8000/api/doctorscheduleget/${id}`
         );
         if (data) {
-          setSchedule(data);
-        } else {
-          console.log(Error);
+          setSchedule(data.reverse());
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        toast.error("Failed to load schedules");
       } finally {
-        setloading(false);
+        setLoading(false);
       }
-    })();
+    };
+
+    const fetchReportedSchedules = async () => {
+      try {
+        const { data } = await axios.get(
+          `http://127.0.0.1:8000/api/docreportget/${id}`
+        );
+        if (data) {
+          setReportedSchedules(data.map((report) => report.schedule_id));
+        }
+      } catch (error) {
+        toast.error("Failed to load reported schedules");
+      }
+    };
+
+    fetchSchedule();
+    fetchReportedSchedules();
   }, [id]);
-  const deleteschedule = async (id) => {
+
+  const deleteschedule = async (scheduleId) => {
     try {
+      setLoading(true);
       const { status } = await axios.delete(
-        `http://127.0.0.1:8000/api/docscheduledelete/${id}`
+        `http://127.0.0.1:8000/api/docscheduledelete/${scheduleId}/`
       );
-      if (status == 204) {
-        setSchedule((prev) => prev.filter((x) => x.id !== id));
-        toast.success("schedule deleted successfully");
+      if (status === 204) {
+        setSchedule((prev) => prev.filter((x) => x.id !== scheduleId));
+        toast.success("Schedule deleted successfully");
       } else {
-        toast.error("not deleted");
+        toast.error("Failed to delete schedule");
       }
     } catch (error) {
-      console.log(error);
+      toast.error("Error occurred while deleting");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const done = async () => {
+    try {
+      setLoading(true);
+      const { status } = await axios.post(
+        `http://127.0.0.1:8000/api/docreportadd/${statusData.schedule_id}/`,
+        statusData
+      );
+
+      if (status === 208) {
+        closePopup();
+      } else {
+        setReportedSchedules((prev) => [...prev, statusData.schedule_id]);
+        toast.success("Report added successfully");
+      }
+    } catch (error) {
+      toast.error("Failed to add report");
+    } finally {
+      setLoading(false);
     }
   };
 
   const formatTimeTo12Hour = (timeString) => {
-    // Try to parse the string as a full DateTime string first
-    const date = new Date(timeString);
-
-    if (!isNaN(date.getTime())) {
-      let hours = date.getHours(); // Use getHours() for local time
-      let minutes = date.getMinutes();
-      const ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12; // '0' hour should be '12'
-      const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
-      return `${hours}:${minutesStr} ${ampm}`;
-    }
-
-    // If date parsing fails, assume timeString is just HH:MM:SS
-    const timeParts = timeString.split(":");
-    if (timeParts.length >= 2) {
-      let hours = parseInt(timeParts[0], 10);
-      let minutes = parseInt(timeParts[1], 10);
-      const ampm = hours >= 12 ? "PM" : "AM";
-      hours = hours % 12;
-      hours = hours ? hours : 12;
-      const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
-      return `${hours}:${minutesStr} ${ampm}`;
-    }
-
-    // If all else fails, return a default or error message
-    console.error("Invalid time string:", timeString);
-    return "Invalid time";
+    const [hours, minutes] = timeString.split(":").map(Number);
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const formattedHours = hours % 12 || 12;
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    return `${formattedHours}:${formattedMinutes} ${ampm}`;
   };
+
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100">
       <DHeader />
       {loading ? (
-        <div className="flex justify-center place-items-center items-center space-x-2 pt-40">
-          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce  "></div>
-          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce "></div>
-          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
+        <div className="flex justify-center items-center h-screen">
+          <div className="flex space-x-2">
+            <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce"></div>
+            <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce"></div>
+            <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
+          </div>
         </div>
       ) : (
-        <div className="relative overflow-x-auto  mx-20 my-8 rounded-md">
-          <table className="w-full text-sm text-left rtl:text-right text-white dark:text-gray-400">
-            <thead className="text-xs text-white uppercase bg-gray-50 dark:bg-blue-500 dark:text-white">
+        <div className="relative overflow-x-auto mx-4 sm:mx-6 md:mx-20 my-8 rounded-md">
+          <table className="w-full text-sm text-left text-gray-700">
+            <thead className="text-xs uppercase bg-blue-500 text-white">
               <tr>
-                <th scope="col" className="px-10 py-3">
-                  date
-                </th>
-                <th scope="col" className="px-10 py-3">
-                  time
-                </th>
-
                 <th scope="col" className="px-6 py-3">
-                  fee
+                  Date
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Time
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Fee
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  Booking
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Status
                 </th>
-
                 <th scope="col" className="px-6 py-3">
-                  delete
+                  Delete
                 </th>
               </tr>
             </thead>
-
-            {schedule.map((s) => (
-              <tr
-                className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                key={s.id}
-              >
-                <td className="px-10 py-3">{s.date}</td>
-                <td className="px-10 py-3">{formatTimeTo12Hour(s.time)}</td>
-
-                <td className="px-10 py-3">{s.fee}</td>
-                <td className="px-10 py-3">
-                  {" "}
-                  <button
-                    className="bg-green-500 p-2 rounded-md text-white"
-                    onClick={() => navigate(`/dbookview/${s.id}`)}
-                  >
-                    CHECK
-                  </button>
-                </td>
-
-                <td className="px-10 py-3">
-                  <button
-                    className="bg-red-500 p-2 rounded-md text-white"
-                    onClick={() => togglePopup(s.id)}
-                  >
-                    DELETE
-                  </button>
-                </td>
-                {popupVisibleId === s.id && (
-                  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20">
-                    <div className=" p-6 rounded-lg bg-white shadow-lg">
-                      <h2 className="text-2xl text-black font-semibold mb-4">
-                        Delete the Schedule?
-                      </h2>
-                      <span className="flex flex-row gap-10  pb-3 justify-evenly text-white text-xl">
-                        <button
-                          className="rounded-lg bg-gray-700 p-2 "
-                          onClick={()=>togglePopup(null)}
-                        >
-                          CLOSE
-                        </button>
-                        <button
-                          className="rounded-lg bg-red-700 px-4"
-                          onClick={() => deleteschedule(s.id)}
-                        >
-                          YES
-                        </button>
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </tr>
-            ))}
+            <tbody>
+              {schedule.map((s) => (
+                <tr
+                  className="bg-white border-b text-white dark:bg-gray-800 dark:border-gray-700"
+                  key={s.id}
+                >
+                  <td className="px-6 py-4">{s.date}</td>
+                  <td className="px-6 py-4">{formatTimeTo12Hour(s.time)}</td>
+                  <td className="px-6 py-4">{s.fee}</td>
+                  <td className="px-6 py-4">
+                    <button
+                      className="bg-green-500 hover:bg-green-600 p-2 rounded-md text-white transition"
+                      onClick={() => navigate(`/dbookview/${s.id}`)}
+                      aria-label="Check Booking"
+                    >
+                      CHECK
+                    </button>
+                  </td>
+                  <td className="px-6 py-4">
+                    {reportedSchedules.includes(s.id) ? (
+                      <button
+                        className="bg-gray-500 p-2 rounded-md text-white transition"
+                        disabled
+                      >
+                        Reported
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => openPopup(s)}
+                        className="bg-green-500 hover:bg-green-600 p-2 rounded-md text-white transition"
+                        aria-label="Change Status"
+                      >
+                        STATUS
+                      </button>
+                    )}
+                  </td>
+                  <td className="px-6 py-4">
+                    <button
+                      className="bg-red-500 hover:bg-red-600 p-2 rounded-md text-white transition"
+                      onClick={() => togglePopup(s.id)}
+                      aria-label="Delete Schedule"
+                    >
+                      DELETE
+                    </button>
+                    {popupVisibleId === s.id && (
+                      <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-20">
+                        <div className="p-6 rounded-lg bg-gray-800 shadow-lg max-w-sm w-full">
+                          <h2 className="text-2xl font-semibold mb-4">
+                            Delete the Schedule?
+                          </h2>
+                          <div className="flex justify-between">
+                            <button
+                              className="bg-gray-700 hover:bg-gray-800 text-white px-4 py-2 rounded-lg transition"
+                              onClick={() => togglePopup(null)}
+                            >
+                              Close
+                            </button>
+                            <button
+                              className="bg-red-700 hover:bg-red-800 text-white px-4 py-2 rounded-lg transition"
+                              onClick={() => deleteschedule(s.id)}
+                            >
+                              Yes
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
+        </div>
+      )}
+      {isPopupOpen && (
+        <div className="absolute z-20 inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-80">
+            <h2 className="text-2xl font-semibold mb-4 text-center">
+              Schedule completed?
+            </h2>
+            <form>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Date
+                </label>
+                <input
+                  type="text"
+                  name="date"
+                  value={statusData.date}
+                  readOnly
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Time
+                </label>
+                <input
+                  type="text"
+                  name="time"
+                  value={statusData.time}
+                  readOnly
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700 text-sm font-bold mb-2">
+                  Fee
+                </label>
+                <input
+                  type="text"
+                  name="fee"
+                  value={statusData.fee}
+                  readOnly
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <button
+                  type="button"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  onClick={() => {
+                    done(), closePopup();
+                  }}
+                >
+                  Yes
+                </button>
+                <button
+                  type="button"
+                  className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  onClick={closePopup}
+                >
+                  No
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       )}
     </div>

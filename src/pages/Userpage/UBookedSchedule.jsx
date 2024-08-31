@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+/* eslint-disable no-empty */
+import { useEffect, useState, useRef } from "react";
 import UHeader from "./UHeader";
 import axios from "axios";
 import { useSelector } from "react-redux";
@@ -9,11 +10,24 @@ function UBookedSchedule() {
   const [views, setViews] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
   const id = useSelector((state) => state.user.id);
-  
+  const printRef = useRef();
 
   const handleClose = () => {
     setIsVisible(false);
     setViews(null);
+  };
+
+  const handlePrint = () => {
+    const printContent = printRef.current;
+    const originalContent = document.body.innerHTML;
+
+    document.body.innerHTML = printContent.innerHTML;
+
+    window.print();
+
+    document.body.innerHTML = originalContent;
+
+    window.location.reload();
   };
 
   useEffect(() => {
@@ -26,10 +40,8 @@ function UBookedSchedule() {
         if (data.length > 0) {
           setStatus(data);
         } else {
-          console.log(Error);
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
@@ -42,10 +54,9 @@ function UBookedSchedule() {
       const { data } = await axios.get(
         `http://127.0.0.1:8000/api/userscheduleview/${scheduleId}`
       );
-      setViews(data);      
+      setViews(data);
       setIsVisible(true);
     } catch (error) {
-      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -54,7 +65,7 @@ function UBookedSchedule() {
   return (
     <div>
       <UHeader />
-      <h1 className="text-2xl text-green-500 text-center ">
+      <h1 className="text-2xl text-green-500 font-semibold mt-2  text-center">
         View Booked Schedules
       </h1>
 
@@ -65,16 +76,23 @@ function UBookedSchedule() {
           <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
         </div>
       ) : status.length > 0 ? (
-        <div className="place-items-start m-1   ">
-          {status.map((s) => (
-            <button
-              key={s.id}
-              className="text-md bg-green-600 hover:bg-green-900 hover:text-xl p-2 mx-auto cursor-pointer text-white rounded-2xl"
-              onClick={() => view(s.schedule)}
-            >
-              Booking
-            </button>
-          ))}
+        <div className="ml-5">
+          <h1 className="font-semibold text-xl">
+            Select your Bookings to see Schedules
+          </h1>
+          <select
+            className="text-md bg-green-700 outline-none hover:bg-green-500 px-4 py-2 cursor-pointer text-white rounded-2xl"
+            onChange={(e) => view(e.target.value)}
+          >
+            <option value="" selected  disabled >
+              Select
+            </option>
+            {status.map((s, index) => (
+              <option key={s.id} value={s.schedule}>
+                Booking {index + 1}
+              </option>
+            ))}
+          </select>
         </div>
       ) : (
         <div className="text-center pt-52">
@@ -86,7 +104,10 @@ function UBookedSchedule() {
       )}
 
       {isVisible && views && (
-        <div className="bg-gray-400  p-5 m-2 rounded-lg text-center mx-auto w-full max-w-md">
+        <div
+          ref={printRef}
+          className="bg-gray-400 p-5 m-2 rounded-lg text-center mx-auto w-full max-w-md"
+        >
           <div className="flex items-center gap-3 mb-4">
             <label className="w-1/3 text-right">DOCTOR NAME:</label>
             <input
@@ -123,12 +144,23 @@ function UBookedSchedule() {
               readOnly
             />
           </div>
-          <button
-            onClick={handleClose}
-            className="bg-red-500 p-2 w-[20%] self-center text-white rounded-xl mt-4"
-          >
-            Close
-          </button>
+          <span className="flex gap-2 place-content-center">
+            <button
+              onClick={handleClose}
+              className="bg-red-500 p-2 w-[20%] self-center text-white rounded-xl mt-4"
+            >
+              Close
+            </button>
+            <button
+              onClick={handlePrint}
+              className="bg-gray-900 p-2 w-[20%] self-center text-white rounded-xl mt-4"
+            >
+              Print
+            </button>
+          </span>
+          <p className="text-sm font-mono mt-3 ">
+            *Print this before reaching doctor
+          </p>
         </div>
       )}
     </div>

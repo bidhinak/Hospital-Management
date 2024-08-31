@@ -30,7 +30,9 @@ import About from "../pages/Userpage/About";
 import DUpdatePassword from "../pages/Doctorpage/DUpdatePassword";
 import UUpdatePassword from "../pages/Userpage/UUpdatePassword";
 import ViewUsers from "../pages/Adminpage/ViewUsers";
-import UserBookings from "../pages/Adminpage/UserBookings";
+import DReport from "../pages/Doctorpage/DReport";
+import ADocEarningsView from "../pages/Adminpage/ADocEarningsView";
+import AUserBookings from "../pages/Adminpage/AUserBookings";
 
 
 function Router() {
@@ -66,6 +68,7 @@ function Router() {
         <Route path="dprofileview" element={<Dprofileview/>}/>
         <Route path="notification" element={<DNotview/>}/>
         <Route path="docupdatepassword" element={<DUpdatePassword/>}/>
+        <Route path="dreport" element={<DReport/>}/>
         
         {/* admin */}
         <Route path="adminpage" element={<Adminpage/>}/>
@@ -74,10 +77,11 @@ function Router() {
         <Route path="anotview" element={<Anotview/>}/>
         <Route path="viewdoctors" element={<ViewDoctors/>}/>
         <Route path="viewusers" element={<ViewUsers/>}/>
-        <Route path="userbookings/:id" element={<UserBookings/>}/>
+        <Route path="auserbookings/:id" element={<AUserBookings/>}/>
         <Route path="aaddtolist/:id" element={<AAddToList/>}/>
         <Route path="aviewaddedlist" element={<AViewAddedList/>}/>
         <Route path="ascheduleview/:id" element={<Ascheduleview/>}/>
+        <Route path="aearningsview/:id" element={<ADocEarningsView/>}/>
     </Routes>
   )
 }

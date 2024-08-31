@@ -55,8 +55,7 @@ function Ulogin() {
             toast.error(res.data.result);
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           setloading(false);
           toast.error("Something went wrong. Please try again.");
         });
@@ -97,6 +96,7 @@ function Ulogin() {
               className="rounded  shadow py-1 px-2 border shadow-black outline-none w-[100%]"
               name="password1"
               autoSave="password1"
+              autoComplete="password1"
               type={showPassword ? "text" : "password"}
               onChange={formik.handleChange}
               value={formik.values.password1}

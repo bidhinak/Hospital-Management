@@ -5,60 +5,59 @@ import { useNavigate } from "react-router";
 function Ulistview() {
   const navigate = useNavigate();
   const [list, setList] = useState([]);
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     (async () => {
       try {
-        setloading(true);
+        setLoading(true);
         const { data } = await axios.get(
           "http://127.0.0.1:8000/api/admindoctoradd"
         );
         setList(data);
       } catch (error) {
-        console.log(error);
+        console.error("Error fetching data:", error);
       } finally {
-        setloading(false);
+        setLoading(false);
       }
     })();
   }, []);
-  return (
-    <div>
-      <div>
-        <h1 className="text-lg p-4 font-semibold">
-          Here are our Doctors and Departments
-        </h1>
-        {loading ? (
-          <div className="flex justify-center place-items-center items-center space-x-2 pt-40">
-          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce  "></div>
-          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce "></div>
-          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
 
+  return (
+    <div className="p-4 md:p-8 bg-gray-100">
+      <h1 className="text-2xl font-semibold mb-6 text-center text-gray-700">
+        Our Doctors and Departments
+      </h1>
+      {loading ? (
+        <div className="flex justify-center items-center min-h-[50vh]">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
         </div>
-        ) : (
-          <div className="grid grid-flow-row md:grid-cols-2 lg:grid-cols-4 gap-4 p-5">
-            {list.map((l) => (
-              <div
-                className="outline-none border-gray-400 shadow-xl rounded-lg border p-3"
-                key={l.id}
-              >
-                <h1 className="font-bold text-lg">{l.name}</h1>
-                <h2 className="font-serif">{l.department}</h2>
-                <img
-                  className="w-full h-56 object-contain rounded-md "
-                  src={`http://127.0.0.1:8000${l.photo}`}
-                  alt={`Photo of Dr. ${l.name}`}
-                />
-                <p
-                  className="cursor-pointer hover:underline font-medium text-xl text-red-500 mt-4 hover:text-red-700"
-                  onClick={() => navigate(`/udocprofile/${l.id}`)}
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {list.map((item) => (
+            <div
+              className="bg-white shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105"
+              key={item.id}
+            >
+              <img
+                className="w-full  object-fill h-60"
+                src={`http://127.0.0.1:8000${item.photo}`}
+                alt={`Photo of Dr. ${item.name}`}
+              />
+              <div className="p-4">
+                <h2 className="text-xl font-semibold mb-2">{item.name}</h2>
+                <p className="text-gray-600 mb-4">{item.department}</p>
+                <button
+                  className="w-full py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                  onClick={() => navigate(`/udocprofile/${item.id}`)}
                 >
-                  Schedule View
-                </p>
+                  View Schedule
+                </button>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -8,7 +8,7 @@ function Anotadd() {
   const formik = useFormik({
     initialValues: { description: "" },
     validationSchema: yup.object({
-      description: yup.string().min(1).max(400).required(),
+      description: yup.string().min(1).max(400).required("Description is required"),
     }),
     onSubmit: (values) => {
       axios
@@ -18,36 +18,39 @@ function Anotadd() {
           },
         })
         .then((res) => {
-          // console.log(res.data);
           if (res.data) {
-            toast.success("notification successfully sended");
+            toast.success("Notification successfully sent");
             formik.resetForm();
           }
         })
-        .catch((err) => console.log(err));
+        .catch(() => {
+          toast.error("Failed to send notification");
+        });
     },
   });
 
   return (
     <div>
       <Adminpage />
-      <div className="text-center flex flex-col gap-6 mt-5">
-        <h1 className="text-pretty text-3xl  text-green-500">Add your Notification </h1>
-        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-5">
-          <label className="text-xl font-serif">Description</label>
+      <div className="flex flex-col items-center gap-8 mt-10">
+        <h1 className="text-4xl font-bold text-green-600">Add Your Notification</h1>
+        <form onSubmit={formik.handleSubmit} className="flex flex-col gap-6 w-full max-w-lg">
+          <label className="text-lg font-medium">Description</label>
           <input
             onChange={formik.handleChange}
             value={formik.values.description}
-            className="px-1 outline-none border rounded-md shadow-lg py-2 w-[50%] self-center"
+            className={`px-4 py-3 border rounded-md shadow-sm focus:outline-none ${
+              formik.errors.description ? "border-red-500" : "border-gray-300"
+            }`}
             name="description"
-            placeholder="type something..."
+            placeholder="Type something..."
             type="text"
           />
-          <p className="text-red-700 text-center">
-            {formik.errors.description}
-          </p>
+          {formik.errors.description && (
+            <p className="text-red-600 text-sm">{formik.errors.description}</p>
+          )}
           <button
-            className="bg-green-400 text-white py-3 rounded-md w-[20%] self-center"
+            className="bg-green-500 hover:bg-green-600 text-white py-3 rounded-md shadow-md transition-all duration-200 ease-in-out"
             type="submit"
           >
             SEND

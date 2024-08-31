@@ -146,7 +146,7 @@ function Doctorsignup() {
             accept="image/*"
             onChange={(e) => formik.setFieldValue("photo", e.target.files[0])}
           />
-          <p className="text-red-700">{formik.errors.photo}</p>
+          <p className="text-red-700">Photo is a required field </p>
           <div className="flex flex-row gap-2">
             <i className="fa-solid fa-graduation-cap self-center  text-white "></i>
 

@@ -38,10 +38,10 @@ function UBanner() {
           className="w-full flex duration-1000  "
           style={{ marginLeft: `-${marginLeft}%` }}
         >
-          {slides.map((slide) => (
+          {slides.map((slide,index) => (
             <img
               className="min-w-full  h-96 object-fill"
-              key={slide.id}
+              key={index}
               src={slide}
             />
           ))}

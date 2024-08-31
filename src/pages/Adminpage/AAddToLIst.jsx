@@ -6,28 +6,28 @@ import axios from "axios";
 
 function AAddToLIst() {
   const navigate = useNavigate();
-  const [loading, setloading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { id } = useParams();
   const [list, setList] = useState("");
+
   useEffect(() => {
     (async () => {
-      setloading(true);
+      setLoading(true);
       try {
         const { data } = await axios.get(
           `http://127.0.0.1:8000/api/doctordetailsget/${id}`
         );
         if (data) {
           setList(data);
-        } else {
-          console.log(data.error);
         }
-      } catch (error) {
-        console.error("Error fetching data:", error);
+      } catch (e) {
+        console.error(e);
       } finally {
-        setloading(false);
+        setLoading(false);
       }
     })();
   }, [id]);
+
   const add = async (e) => {
     e.preventDefault();
     try {
@@ -44,55 +44,53 @@ function AAddToLIst() {
         { headers: { "Content-Type": "multipart/form-data" } }
       );
       if (status) {
-        console.log(status);
         toast.success("New doctor added to list");
         navigate("/viewdoctors");
       } else {
-        toast.error("not added");
+        toast.error("Doctor not added");
       }
-    } catch (error) {
-      console.log(error);
+    } catch (e) {
+      console.error(e);
     }
   };
 
   return (
     <div>
       <Adminpage />
-      <h1 className="text-2xl text-center font-semibold underline text-green-500">
-        Add Doctor to the List
-      </h1>
-      {loading ? (
-        <div className="flex justify-center place-items-center items-center space-x-2 pt-40">
-          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce  "></div>
-          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce "></div>
-          <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
-        </div>
-      ) : (
-        <div className="p-3 flex justify-center">
-          <form
-            onSubmit={add}
-            key={list.id}
-            className="shadow-gray-600 shadow-xl w-[50%]  rounded-md p-3 text-center "
-          >
-            <img
-              className="w-full h-56 object-contain rounded-md"
-              src={`http://127.0.0.1:8000/${list.photo}`}
-              alt="no image"
-            />
-            {/* console.log({list.photo}); */}
-            {/* <input type="image" />{list.photo} */}
-            <h1 className="text-xl text-gray-600 font-semibold ">
-              {list.username}
-            </h1>
-            <h1 className="text-lg  font-light">{list.mobile}</h1>
-            <h1 className="text-lg font-serif">{list.department}</h1>
-            <h1 className="text-lg font-medium ">{list.qualification}</h1>
-            <button className="bg-green-500 rounded-md p-2" type="submit">
-              ADD
-            </button>
-          </form>
-        </div>
-      )}
+      <div className="max-w-2xl mx-auto mt-10">
+        <h1 className="text-3xl text-center font-semibold  text-green-500 mb-6">
+          Add Doctor to the List
+        </h1>
+        {loading ? (
+          <div className="flex justify-center items-center space-x-2 pt-40">
+            <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce"></div>
+            <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce"></div>
+            <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce delay-200"></div>
+          </div>
+        ) : (
+          <div className="p-5 bg-white shadow-lg rounded-lg">
+            <form onSubmit={add} key={list.id} className="text-center">
+              <img
+                className="w-full h-60 object-contain rounded-md mb-4"
+                src={`http://127.0.0.1:8000/${list.photo}`}
+                alt="Doctor"
+              />
+              <h1 className="text-xl text-gray-700 font-bold mb-2">
+                {list.username}
+              </h1>
+              <h1 className="text-lg text-gray-500 mb-2">{list.mobile}</h1>
+              <h1 className="text-lg text-gray-600 mb-2">{list.department}</h1>
+              <h1 className="text-lg text-gray-700 mb-4">{list.qualification}</h1>
+              <button
+                className="w-full bg-green-500 text-white rounded-md p-3 font-semibold hover:bg-green-600 transition duration-300"
+                type="submit"
+              >
+                ADD
+              </button>
+            </form>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

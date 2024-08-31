@@ -66,8 +66,7 @@ function Officiallogin() {
             toast.error(res.data.result);
           }
         })
-        .catch((err) => {
-          console.log(err);
+        .catch(() => {
           setloading(false);
           toast.error("Something went wrong. Please try again.");
         });
@@ -112,6 +111,7 @@ function Officiallogin() {
               className="rounded  shadow py-1 px-2 border shadow-black outline-none w-[100%]"
               name="password1"
               autoSave="password1"
+              autoComplete="password1"
               type={visible ? "text" : "password"}
               onChange={formik.handleChange}
               value={formik.values.password1}

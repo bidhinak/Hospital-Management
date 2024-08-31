@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { useDispatch, useSelector } from "react-redux";
 import DHeader from "./DHeader";
 import axios from "axios";
@@ -14,8 +15,7 @@ function Dprofileview() {
   const id = useSelector((state) => state.user.id);
   const [show, setShow] = useState(false);
   const [photoFile, setPhotoFile] = useState(null);
-  console.log(photoFile);
-  
+
   const [profileData, setProfileData] = useState({
     username: username,
     email: email,
@@ -58,9 +58,7 @@ function Dprofileview() {
       if (response.status === 204) {
         navigate("/");
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   const save = async () => {
     try {
@@ -78,7 +76,6 @@ function Dprofileview() {
       );
 
       if (response.status === 200) {
-        // console.log(response);
         dispatch(
           updateUser({
             id: response.data.id,
@@ -94,7 +91,6 @@ function Dprofileview() {
       }
     } catch (error) {
       toast.error("Failed to update photo");
-      console.log(error);
     }
   };
   const save2 = async () => {
@@ -102,7 +98,7 @@ function Dprofileview() {
       const response = await axios.put(
         `http://127.0.0.1:8000/api/docprofilephotoupdate2/${id}/`,
         {
-          photo:`/media/doctors/${photoFile.name}`,
+          photo: `/media/doctors/${photoFile.name}`,
           name: profileData.username,
           department: profileData.department,
           details_id: profileData.id,
@@ -115,13 +111,8 @@ function Dprofileview() {
         }
       );
       if (response) {
-        console.log(photo.path);
-        
-        // console.log(response);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   const updateProfile = async () => {
@@ -145,7 +136,6 @@ function Dprofileview() {
 
       if (response.status === 200) {
         setProfileData(response.data);
-        // console.log(response.data);
 
         dispatch(
           updateUser({
@@ -163,7 +153,6 @@ function Dprofileview() {
       }
     } catch (error) {
       toast.error("Failed to update profile");
-      console.log(error);
     }
   };
   const updateprofile2 = async () => {
@@ -184,17 +173,12 @@ function Dprofileview() {
       );
 
       if (response) {
-        // console.log(photo);
-        
-        // console.log(response);
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
 
   return (
-    <div>
+    <div className="bg-gray-600 min-h-screen">
       <DHeader />
       {isPopupOpen && (
         <div className=" absolute z-20 inset-0 flex items-center justify-center bg-black bg-opacity-50">
@@ -307,7 +291,9 @@ function Dprofileview() {
                   />
                   <button
                     className="bg-green-400 p-2 rounded-lg "
-                    onClick={()=>{save(),save2()}}
+                    onClick={() => {
+                      save(), save2();
+                    }}
                   >
                     <i className="fa-regular fa-floppy-disk"></i>
                   </button>
@@ -320,7 +306,7 @@ function Dprofileview() {
                 </span>
               </span>
             ) : (
-              <span className=" " >
+              <span className=" ">
                 <img
                   className="p-4  rounded-full border object-contain"
                   src={`http://127.0.0.1:8000${photo}`}
@@ -348,7 +334,7 @@ function Dprofileview() {
           </button>
         </div>
 
-        <div className="flex flex-col gap-10 mt-3">
+        <div className="flex flex-col  bg-gray-200 p-4 rounded-lg gap-10 mt-3">
           <div className="flex items-center gap-3">
             <label className="font-bold w-1/3 font-serif text-left">NAME</label>
 
@@ -410,18 +396,28 @@ function Dprofileview() {
             <i className="fa-solid fa-user-slash"></i> Delete Your Account
           </button>
           {isPopupVisible && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-90">
-              <div className=" p-6 rounded-lg shadow-lg">
-                <h2 className="text-3xl mb-4 text-red-700 text-center">
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ease-in-out">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-80 max-w-full">
+                <p className="text-lg font-semibold mb-4 text-center">
                   Are you sure?
-                </h2>
-                <p className="text-red-400 font-serif">
-                  Deleting will clear all your data.
                 </p>
-                <span className="flex flex-row gap-10 pt-2 pb-3 justify-evenly text-white text-xl">
-                  <button onClick={togglePopup}>CLOSE</button>
-                  <button onClick={() => deleteAccount(id)}>YES</button>
-                </span>
+                <p className="text-gray-700 text-center mb-6">
+                  Deleting your account will remove all your data permanently.
+                </p>
+                <div className="flex justify-between">
+                  <button
+                    className="bg-gray-300 text-gray-800 px-4 py-2 rounded-lg mt-4 transition-colors duration-300"
+                    onClick={togglePopup}
+                  >
+                    No
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 rounded-lg mt-4 transition-transform duration-300 hover:scale-105"
+                    onClick={() => deleteAccount(id)}
+                  >
+                    Yes, Delete
+                  </button>
+                </div>
               </div>
             </div>
           )}

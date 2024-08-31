@@ -16,8 +16,8 @@ function Header() {
 
   return (
     <div>
-      <div className="flex flex-row justify-between p-8">
-        <h1>HOSPITAL</h1>
+      <div className="flex shadow-md flex-row justify-between p-8">
+        <h1 className=" tracking-wider">HOSPITAL</h1>
         <button
           className="inline-flex items-center ml-auto md:hidden text-black hover:text-gray-800 focus:outline-none"
           onClick={toggleMenu}
@@ -40,9 +40,9 @@ function Header() {
         <nav
           className={`${
             menuOpen ? "block" : "hidden"
-          } md:flex md:flex-row md:ml-auto w-full md:w-auto`}
-        >
-          <ul className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8 items-center">
+          } md:flex md:items-center  md:static absolute  left-0 top-20 w-full md:w-auto bg-blue-300 md:bg-transparent p-4 md:p-0 z-20`}
+          >
+          <ul className=" flex flex-col sm:z-10 md:flex-row space-y-4 md:space-y-0 md:space-x-8 items-center">
             <li
               onClick={() => navigate("/home")}
               className="relative group cursor-pointer"

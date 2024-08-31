@@ -13,19 +13,23 @@ function DHeader() {
   const toggleDropdown = () => setDropdown(!dropdown);
   const [visibleHome, setVisibleHome] = useState(false);
   const [visibleNotification, setVisibleNotification] = useState(false);
+  const [visibleReport, setVisibleReport] = useState(false);
+
   const showHome = () => setVisibleHome(true);
   const hideHome = () => setVisibleHome(false);
 
   const showNotification = () => setVisibleNotification(true);
   const hideNotification = () => setVisibleNotification(false);
+  const showReport = () => setVisibleReport(true);
+  const hideReport = () => setVisibleReport(false);
 
   return (
     <div>
-      <div className="flex flex-row justify-between bg-gradient-to-t from-blue-300 p-8 bg-blue-700 text-white">
+      <div className="flex flex-row justify-between items-center p-6 bg-gradient-to-r from-blue-700 to-purple-500 text-white shadow-lg">
         <div className="relative inline-block">
-          <h1 className="shadow-md rounded-md p-2">HOSPITAL MANAGEMENT</h1>
+          <h1 className="tracking-wider">HOSPITAL MANAGEMENT</h1>
         </div>
-        <ul className="flex flex-row gap-8 ">
+        <ul className=" flex-row gap-8 inline-flex ">
           {visibleHome ? (
             <span onMouseLeave={hideHome}>
               <li
@@ -37,7 +41,21 @@ function DHeader() {
             </span>
           ) : (
             <span onMouseOver={showHome}>
-              <i className="fa-solid fa-house-user text-xl cursor-pointer"></i>
+              <i className="fa-solid shadow-sm fa-house-user text-2xl cursor-pointer"></i>
+            </span>
+          )}
+          {visibleReport ? (
+            <span onMouseLeave={hideReport}>
+              <li
+                onClick={() => navigate("/dreport")}
+                className=" cursor-pointer"
+              >
+                REPORT
+              </li>
+            </span>
+          ) : (
+            <span onMouseOver={showReport}>
+              <i className="fa-regular fa-rectangle-list text-2xl cursor-pointer"></i>
             </span>
           )}
 
@@ -52,14 +70,14 @@ function DHeader() {
             </span>
           ) : (
             <span onMouseOver={showNotification}>
-              <i className="fa-solid fa-bell cursor-pointer text-xl"></i>
+              <i className="fa-solid fa-bell cursor-pointer text-2xl"></i>
             </span>
           )}
 
           <div className="relative">
             <button
               onClick={toggleDropdown}
-              className="bg-gray-400 shadow-md rounded-full cursor-pointer px-3 py-1 hover:text-sky-600"
+              className="bg-red-500 text-white rounded-full h-10 w-10 flex items-center justify-center text-xl font-semibold shadow-md hover:bg-red-600"
             >
               {firstLetter}
             </button>

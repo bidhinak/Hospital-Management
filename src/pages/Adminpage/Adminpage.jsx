@@ -16,44 +16,39 @@ function Adminpage() {
   const [visibleHome, setVisibleHome] = useState(false);
   const showHome = () => setVisibleHome(true);
   const hideHome = () => setVisibleHome(false);
+
   return (
     <div>
-      <div className="flex flex-row justify-between p-8 bg-gradient-to-t from-blue-200 bg-blue-700 text-white">
-        <h1 className="shadow-md rounded-md p-2">HOSPITAL MANAGEMENT</h1>
-
-        <ul className="flex flex-row gap-5 ">
-        {visibleHome ? (
-              <span onMouseLeave={hideHome}>
-                <li
-                  className="cursor-pointer  "
-                  onClick={() => navigate("/adashboard")}
-                >
-                  HOME
-                </li>
-              </span>
-            ) : (
-              <span onMouseOver={showHome}>
-                <i className="fa-solid shadow-md fa-house-user text-2xl cursor-pointer"></i>
-              </span>
-            )}
+      <div className="flex flex-row justify-between items-center p-6 bg-gradient-to-r from-blue-700 to-purple-500 text-white shadow-lg">
+        <h1 className="  tracking-wider">HOSPITAL MANAGEMENT</h1>
+        <ul className="flex items-center space-x-8">
+          {visibleHome ? (
+            <li onMouseLeave={hideHome} onClick={() => navigate("/adashboard")}>
+              <span className="text-lg font-medium cursor-pointer">HOME</span>
+            </li>
+          ) : (
+            <span onMouseOver={showHome}>
+              <i className="fa-solid fa-house-user text-2xl cursor-pointer hover:text-gray-300"></i>
+            </span>
+          )}
           <div className="relative group dropdown-menu-wrapper">
             <button
               onClick={toggleDropdown}
-              className="bg-red-500 shadow-md rounded-full cursor-pointer px-3 py-1  hover:text-gray-900"
+              className="bg-red-500 text-white rounded-full h-10 w-10 flex items-center justify-center text-xl font-semibold shadow-md hover:bg-red-600"
             >
               {firstLetter}
             </button>
             {dropdown && (
-              <ul className="absolute z-20 right-0 mt-2 w-48 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg">
+              <ul className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 divide-y divide-gray-100 rounded-md shadow-lg">
                 <li
                   onClick={() =>
                     dispatch(updateUser(initialState), navigate("/"))
                   }
                 >
                   <a className="block px-4 py-2 text-gray-700 hover:bg-gray-100 cursor-pointer">
-                  <span className="flex justify-between">
-                    LOGOUT
-                    <i className="fa-solid fa-right-from-bracket"></i>
+                    <span className="flex justify-between">
+                      LOGOUT
+                      <i className="fa-solid fa-right-from-bracket"></i>
                     </span>
                   </a>
                 </li>

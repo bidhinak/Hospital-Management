@@ -6,69 +6,76 @@ import UHeader from "./UHeader";
 function UDocprofile() {
   const navigate = useNavigate();
   const { id } = useParams();
-  const [profile, setprofile] = useState([]);
-  const [loading, setloading] = useState(false);
+  const [profile, setProfile] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     (async () => {
-      setloading(true);
+      setLoading(true);
       try {
         const { data } = await axios.get(
           `http://127.0.0.1:8000/api/userdoctorprofileget/${id}`
         );
-        if (data) {
-          setprofile(data);
-        } else {
-          console.log(data.error);
-        }
+        setProfile(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching profile:", error);
       } finally {
-        setloading(false);
+        setLoading(false);
       }
     })();
   }, [id]);
+
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100">
       <UHeader />
       {loading ? (
-        <div className="flex justify-center place-items-center items-center space-x-2 pt-40">
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce  "></div>
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce "></div>
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
-
-      </div>
-      ) : (
-        <div className="flex flex-col gap-2 p-4  ">
-          <h1 className=" text-purple-950 text-3xl font-semibold text-center ">
-            Details and schedules of {profile.name}
+        <div className="flex justify-center items-center min-h-[70vh]">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
+        </div>
+      ) : profile ? (
+        <div className="flex flex-col items-center p-6 md:p-8 lg:p-10">
+          <h1 className="text-3xl font-semibold text-purple-800 mb-6">
+            Details and Schedule of Dr. {profile.name}
           </h1>
-          <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2  content-center">
-            <img
-              className="w-[50%] rounded-md"
-              src={`http://127.0.0.1:8000/${profile.photo}`}
-              alt="no image yet."
-            />
-            <div className="flex flex-col gap-5">
-              <label className=" text-lg font-semibold ">MOBILE</label>
-              <h1 className="text-center text-lg shadow-lg w-[50%] px-3 py-1 rounded-md shadow-gray-500 font-normal">
-                {profile.mobile}
-              </h1>
-              <label className="text-lg font-semibold ">DEPARTMENT</label>
-              <h1 className="text-center text-lg shadow-lg w-[50%] px-3 py-1 rounded-md shadow-gray-500 font-normal">
-                {profile.department}
-              </h1>
-              <label className="text-lg font-semibold ">QUALIFICATION</label>
-              <h1 className="text-center text-lg shadow-lg w-[50%] px-3 py-1 rounded-md shadow-gray-500 font-normal">
-                {profile.qualification}
-              </h1>
-              <p
-                className="cursor-pointer font-mono bg-red-600 p-3 w-[50%] text-center rounded-lg text-white text-xl"
-                onClick={() => navigate(`/ucheckschedule/${profile.details}`)}
-              >
-                check for schedule
-              </p>
+          <div className="bg-white shadow-lg rounded-lg overflow-hidden w-full max-w-4xl">
+            <div className="flex flex-col md:flex-row">
+              <img
+                className="w-full md:w-1/2 h-[40%] object-fill"
+                src={`http://127.0.0.1:8000/${profile.photo}`}
+                alt={`Dr. ${profile.name}`}
+              />
+              <div className="p-6 flex flex-col justify-center w-full md:w-1/2">
+                <div className="mb-4">
+                  <label className="block text-lg font-semibold text-gray-700">
+                    Mobile
+                  </label>
+                  <p className="text-lg text-gray-900 mt-1">{profile.mobile}</p>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-lg font-semibold text-gray-700">
+                    Department
+                  </label>
+                  <p className="text-lg text-gray-900 mt-1">{profile.department}</p>
+                </div>
+                <div className="mb-4">
+                  <label className="block text-lg font-semibold text-gray-700">
+                    Qualification
+                  </label>
+                  <p className="text-lg text-gray-900 mt-1">{profile.qualification}</p>
+                </div>
+                <button
+                  className="mt-6 py-2 px-4 bg-red-600 text-white rounded-lg shadow-md hover:bg-red-700 transition-colors"
+                  onClick={() => navigate(`/ucheckschedule/${profile.details}`)}
+                >
+                  Check Schedule
+                </button>
+              </div>
             </div>
           </div>
+        </div>
+      ) : (
+        <div className="flex justify-center items-center min-h-[70vh]">
+          <p className="text-xl text-gray-600">Profile not found.</p>
         </div>
       )}
     </div>

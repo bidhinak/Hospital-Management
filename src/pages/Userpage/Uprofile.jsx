@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 import { useDispatch, useSelector } from "react-redux";
 import UHeader from "./UHeader";
 import { useNavigate } from "react-router";
@@ -18,12 +19,15 @@ function Uprofile() {
     email: email,
     mobile: mobile,
   });
+
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
   };
+
   const closePopup = () => {
     setIsPopupOpen(false);
   };
+
   const openPopup = () => {
     setIsPopupOpen(true);
   };
@@ -36,10 +40,9 @@ function Uprofile() {
       if (response.status === 204) {
         navigate("/");
       }
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
+
   const updateProfile = async () => {
     try {
       const formData = new FormData();
@@ -59,7 +62,6 @@ function Uprofile() {
 
       if (response.status === 200) {
         setProfileData(response.data);
-        console.log(response.data);
 
         dispatch(
           updateUser({
@@ -77,9 +79,9 @@ function Uprofile() {
       }
     } catch (error) {
       toast.error("Failed to update profile");
-      console.log(error);
     }
   };
+
   const handleChange = (event) => {
     const { name, value } = event.target;
     setProfileData((prevData) => ({
@@ -87,13 +89,14 @@ function Uprofile() {
       [name]: value,
     }));
   };
+
   return (
-    <div>
+    <div className="min-h-screen bg-gray-100">
       <UHeader />
       {isPopupOpen && (
-        <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg w-80">
-            <h2 className="text-2xl font-semibold mb-4 text-center">
+            <h2 className="text-2xl font-semibold mb-4 text-center text-gray-800">
               Update Profile
             </h2>
 
@@ -135,18 +138,18 @@ function Uprofile() {
                 />
               </div>
 
-              <div className="flex flex-row justify-evenly">
+              <div className="flex justify-between">
                 <button
                   type="button"
                   onClick={closePopup}
-                  className="bg-red-500 text-white px-4 py-2 rounded-lg mt-4"
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg"
                 >
                   Close
                 </button>
                 <button
                   type="button"
                   onClick={updateProfile}
-                  className="bg-green-500 text-white px-4 py-2 rounded-lg mt-4"
+                  className="bg-green-500 text-white px-4 py-2 rounded-lg"
                 >
                   Save
                 </button>
@@ -155,72 +158,91 @@ function Uprofile() {
           </div>
         </div>
       )}
-      <div className=" text-center items-center flex flex-col  gap-5 pt-3">
-        <h1 className="text-3xl  text-purple-500">Profile of {username}</h1>
-        <div className="flex flex-row gap-2">
-          <button
-            onClick={openPopup}
-            className="bg-green-800 rounded-xl w-auto py-2 px-2 text-white"
-          >
-            <i className="fa-solid fa-user-pen"></i> {""}
-            Update Your Profile
-          </button>
-          <button
-            onClick={() => navigate("/userupdatepassword")}
-            className="bg-blue-800 rounded-xl w-auto py-2 px-2 text-white"
-          >
-            <i className="fa-solid fa-pencil"></i> Change Your Password
-          </button>
-        </div>
-        <div className="flex flex-col gap-4 w-[50%] text-left">
-          <div className="flex items-center justify-between gap-4">
-            <label className="text-xl font-semibold">NAME</label>
-            <input
-              className="outline-none rounded-lg p-2 text-center w-[80%] shadow-xl"
-              type="text"
-              value={username}
-            />
+      <div className="container mx-auto px-4 py-10">
+        <div className="bg-white  shadow-lg rounded-lg p-6">
+          <h1 className="text-3xl font-semibold text-purple-500 text-center mb-6">
+            Profile of {username}
+          </h1>
+          <div className="flex justify-center gap-4 mb-8">
+            <button
+              onClick={openPopup}
+              className="bg-green-700 hover:bg-green-800 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            >
+              <i className="fa-solid fa-user-pen mr-2"></i> Update Your Profile
+            </button>
+            <button
+              onClick={() => navigate("/userupdatepassword")}
+              className="bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            >
+              <i className="fa-solid fa-pencil mr-2"></i> Change Your Password
+            </button>
           </div>
-          <div className="flex items-center justify-between gap-4">
-            <label className="text-xl font-semibold">MOBILE</label>
-            <input
-              className="outline-none rounded-lg p-2 text-center w-[80%] shadow-xl"
-              type="text"
-              value={mobile}
-            />
-          </div>
-          <div className="flex items-center justify-between gap-4">
-            <label className="text-xl font-semibold">EMAIL</label>
-            <input
-              className="outline-none rounded-lg p-2 text-center w-[80%] shadow-xl"
-              type="text"
-              value={email}
-            />
-          </div>
-        </div>
-
-        <button
-          onClick={togglePopup}
-          className="bg-red-800 rounded-xl w-auto mx-auto py-2 px-2 text-white"
-        >
-          <i className="fa-solid fa-user-slash"></i> Delete Your Account
-        </button>
-        {isPopupVisible && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-90">
-            <div className=" p-6 rounded-lg shadow-lg">
-              <h2 className="text-3xl mb-4 text-red-700 text-center">
-                Are you sure?
-              </h2>
-              <p className="text-red-400 font-serif">
-                Deleting will clear all your data.
-              </p>
-              <span className="flex flex-row gap-10 pt-2 pb-3 justify-evenly text-white text-xl">
-                <button onClick={togglePopup}>CLOSE</button>
-                <button onClick={() => deleteAccount(id)}>YES</button>
-              </span>
+          <div className="space-y-4 p-3 ml-16 mr-3">
+            <div className="flex items-center  justify-between">
+              <label className="text-xl  font-semibold text-gray-700">Name</label>
+              <input
+                className="outline-none rounded-lg p-2 text-center w-3/4 shadow-md bg-gray-50"
+                type="text"
+                value={username}
+                readOnly
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <label className="text-xl font-semibold text-gray-700">Mobile</label>
+              <input
+                className="outline-none rounded-lg p-2 text-center w-3/4 shadow-md bg-gray-50"
+                type="text"
+                value={mobile}
+                readOnly
+              />
+            </div>
+            <div className="flex items-center justify-between">
+              <label className="text-xl font-semibold text-gray-700">Email</label>
+              <input
+                className="outline-none rounded-lg p-2 text-center w-3/4 shadow-md bg-gray-50"
+                type="text"
+                value={email}
+                readOnly
+              />
             </div>
           </div>
-        )}
+
+          <div className="mt-8 text-center">
+            <button
+              onClick={togglePopup}
+              className="bg-red-700 hover:bg-red-800 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            >
+              <i className="fa-solid fa-user-slash mr-2"></i> Delete Your Account
+            </button>
+          </div>
+
+          {isPopupVisible && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-90 z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg">
+                <h2 className="text-3xl font-bold text-red-700 mb-4 text-center">
+                  Are you sure?
+                </h2>
+                <p className="text-gray-700 text-center mb-6">
+                  Deleting your account will remove all your data permanently.
+                </p>
+                <div className="flex justify-center gap-4">
+                  <button
+                    onClick={togglePopup}
+                    className="bg-gray-300 hover:bg-gray-400 text-gray-700 font-semibold py-2 px-4 rounded-lg transition-colors"
+                  >
+                    Close
+                  </button>
+                  <button
+                    onClick={() => deleteAccount(id)}
+                    className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+                  >
+                    Yes, Delete
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

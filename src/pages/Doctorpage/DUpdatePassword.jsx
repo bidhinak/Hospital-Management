@@ -47,9 +47,9 @@ function DUpdatePassword() {
   return (
     <div>
       <DHeader />
-      <div className="max-w-md mx-auto">
-        <h2 className="text-3xl text-blue-600 font-bold mb-4 ">Change Password</h2>
-        <form onSubmit={handleChangePassword}>
+      <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-lg mt-10">
+      <h2 className="text-3xl text-blue-600 font-bold mb-6 text-center">Change Password</h2>
+      <form onSubmit={handleChangePassword}>
           <div className="mb-4">
             <label className="block text-gray-700 text-lg">Old Password</label>
             <input

@@ -14,10 +14,8 @@ function Anotview() {
         const { data } = await axios.get(
           "http://127.0.0.1:8000/api/Notificationdetails"
         );
-        setNot(data);
-        // console.log(data);
+        setNot(data.reverse());
       } catch (error) {
-        console.error("Error fetching notifications:", error);
         toast.error("Failed to fetch notifications");
       } finally {
         setloading(false);
@@ -37,26 +35,21 @@ function Anotview() {
         toast.error("Failed to delete notification");
       }
     } catch (error) {
-      console.error("Error deleting notification:", error);
       toast.error("An error occurred while deleting the notification");
     }
   };
 
   const formatTimeTo12Hour = (timeString) => {
-    // Try to parse the string as a full DateTime string first
     const date = new Date(timeString);
-
     if (!isNaN(date.getTime())) {
-      let hours = date.getHours(); // Use getHours() for local time
+      let hours = date.getHours();
       let minutes = date.getMinutes();
       const ampm = hours >= 12 ? "PM" : "AM";
       hours = hours % 12;
-      hours = hours ? hours : 12; // '0' hour should be '12'
+      hours = hours ? hours : 12;
       const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
       return `${hours}:${minutesStr} ${ampm}`;
     }
-
-    // If date parsing fails, assume timeString is just HH:MM:SS
     const timeParts = timeString.split(":");
     if (timeParts.length >= 2) {
       let hours = parseInt(timeParts[0], 10);
@@ -67,9 +60,6 @@ function Anotview() {
       const minutesStr = minutes < 10 ? `0${minutes}` : minutes;
       return `${hours}:${minutesStr} ${ampm}`;
     }
-
-    // If all else fails, return a default or error message
-    console.error("Invalid time string:", timeString);
     return "Invalid time";
   };
 
@@ -77,27 +67,26 @@ function Anotview() {
     <div>
       <Adminpage />
       {loading ? (
-        <div className="flex justify-center place-items-center items-center space-x-2 pt-40">
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce  "></div>
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce "></div>
-        <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce delay-1000"></div>
-
-      </div>
+        <div className="flex justify-center items-center h-screen">
+          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce mr-1"></div>
+          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce mr-1"></div>
+          <div className="w-4 h-4 bg-blue-500 rounded-full animate-bounce"></div>
+        </div>
       ) : (
-        <div className="relative overflow-x-auto mx-20 my-8 rounded-md">
-          <table className="w-full text-sm text-left rtl:text-right text-white dark:text-gray-400">
-            <thead className="text-xs text-white uppercase bg-gray-50 dark:bg-blue-500 dark:text-white">
+        <div className="overflow-x-auto mx-4 md:mx-20 my-8 rounded-md shadow-lg">
+          <table className="min-w-full text-sm text-left text-gray-700 dark:text-gray-200">
+            <thead className="text-xs text-gray-100 uppercase bg-blue-600 dark:bg-blue-700">
               <tr>
-                <th scope="col" className="px-10 py-3">
+                <th scope="col" className="px-6 py-3">
                   Date
                 </th>
-                <th scope="col" className="px-10 py-3">
+                <th scope="col" className="px-6 py-3">
                   Time
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Description
+                  Message
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-6 py-3 text-center">
                   Delete
                 </th>
               </tr>
@@ -105,17 +94,17 @@ function Anotview() {
             <tbody>
               {notification.map((not) => (
                 <tr
-                  className="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
+                  className="bg-white dark:bg-gray-800 border-b dark:border-gray-700"
                   key={not.id}
                 >
-                  <td className="px-10 py-3">
+                  <td className="px-6 py-3">
                     {new Date(not.date).toLocaleDateString()}
                   </td>
-                  <td className="px-10 py-3">{formatTimeTo12Hour(not.Time)}</td>
-                  <td className="px-10 py-3">{not.description}</td>
-                  <td className="px-10 py-3">
+                  <td className="px-6 py-3">{formatTimeTo12Hour(not.Time)}</td>
+                  <td className="px-6 py-3">{not.description}</td>
+                  <td className="px-6 py-3 text-center">
                     <button
-                      className="bg-red-600 p-1 rounded-lg text-white"
+                      className="bg-red-600 hover:bg-red-700 text-white py-1 px-3 rounded-lg shadow-md transition-all duration-200 ease-in-out"
                       onClick={() => deletenot(not.id)}
                     >
                       DELETE
